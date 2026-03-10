@@ -1,731 +1,394 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Renovación de Tuberías Sin Zanja | Tendencias Globales</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<style>
-  :root {
-    --bg: #f0f4f8; --card: #ffffff; --text: #1a202c; --sub: #4a5568;
-    --accent: #2b6cb0; --accent2: #2c7a7b; --accent3: #c05621;
-    --border: #e2e8f0; --green: #276749; --red: #c53030;
-  }
-  [data-theme="dark"] {
-    --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --sub: #94a3b8;
-    --accent: #60a5fa; --accent2: #2dd4bf; --accent3: #fb923c;
-    --border: #334155; --green: #4ade80; --red: #f87171;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); transition: all 0.3s; }
-  header { background: linear-gradient(135deg, #1a365d, #2b6cb0); color: white; padding: 2rem 1.5rem 1.5rem; position: relative; }
-  header h1 { font-size: clamp(1.4rem, 4vw, 2.2rem); font-weight: 800; line-height: 1.2; }
-  header p { margin-top: 0.5rem; opacity: 0.85; font-size: 0.95rem; }
-  .header-meta { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
-  .badge { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 0.3rem 0.8rem; font-size: 0.8rem; }
-  .dark-toggle { position: absolute; top: 1.2rem; right: 1.2rem; background: rgba(255,255,255,0.2); border: none; color: white; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 1.1rem; transition: background 0.2s; }
-  .dark-toggle:hover { background: rgba(255,255,255,0.35); }
-  nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 1rem; display: flex; gap: 0; overflow-x: auto; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-  nav button { background: none; border: none; color: var(--sub); padding: 1rem 1.2rem; cursor: pointer; font-size: 0.88rem; font-weight: 600; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; }
-  nav button.active, nav button:hover { color: var(--accent); border-bottom-color: var(--accent); }
-  .container { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem; }
-  .section { display: none; }
-  .section.active { display: block; }
-  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-  .kpi { background: var(--card); border-radius: 12px; padding: 1.2rem; border: 1px solid var(--border); position: relative; overflow: hidden; }
-  .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
-  .kpi.blue::before { background: var(--accent); }
-  .kpi.teal::before { background: var(--accent2); }
-  .kpi.orange::before { background: var(--accent3); }
-  .kpi.green::before { background: #38a169; }
-  .kpi-label { font-size: 0.78rem; color: var(--sub); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-  .kpi-value { font-size: 1.9rem; font-weight: 800; margin: 0.3rem 0; color: var(--text); }
-  .kpi-sub { font-size: 0.8rem; color: var(--sub); }
-  .kpi-trend { font-size: 0.82rem; font-weight: 700; margin-top: 0.4rem; }
-  .kpi-trend.up { color: var(--green); }
-  .kpi-trend.down { color: var(--red); }
-  .sparkline { width: 100%; height: 40px; margin-top: 0.5rem; }
-  .card { background: var(--card); border-radius: 12px; padding: 1.4rem; border: 1px solid var(--border); margin-bottom: 1.2rem; }
-  .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
-  .chart-wrap { position: relative; height: 280px; }
-  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; }
-  .filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-  .filter-btn { background: var(--bg); border: 1px solid var(--border); color: var(--sub); padding: 0.4rem 0.9rem; border-radius: 20px; cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.2s; }
-  .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-  details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.8rem; overflow: hidden; }
-  summary { padding: 1rem 1.2rem; cursor: pointer; font-weight: 700; font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center; list-style: none; }
-  summary::-webkit-details-marker { display: none; }
-  summary::after { content: '▼'; font-size: 0.7rem; color: var(--sub); transition: transform 0.2s; }
-  details[open] summary::after { transform: rotate(180deg); }
-  .details-body { padding: 0 1.2rem 1.2rem; color: var(--sub); font-size: 0.9rem; line-height: 1.7; }
-  .details-body ul { padding-left: 1.2rem; margin-top: 0.5rem; }
-  .details-body li { margin-bottom: 0.4rem; }
-  .compare-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-  .compare-table th { background: var(--accent); color: white; padding: 0.7rem 1rem; text-align: left; }
-  .compare-table td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); }
-  .compare-table tr:nth-child(even) td { background: var(--bg); }
-  .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700; margin: 0.1rem; }
-  .tag.green { background: #c6f6d5; color: #276749; }
-  .tag.red { background: #fed7d7; color: #c53030; }
-  [data-theme="dark"] .tag.green { background: #1c4532; color: #68d391; }
-  [data-theme="dark"] .tag.red { background: #4a1515; color: #fc8181; }
-  .roi-calc { background: var(--card); border-radius: 12px; padding: 1.4rem; border: 1px solid var(--border); }
-  .roi-calc h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; }
-  .input-group { margin-bottom: 1rem; }
-  .input-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--sub); margin-bottom: 0.3rem; }
-  .input-group input, .input-group select { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 0.9rem; }
-  .calc-btn { background: var(--accent); color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.9rem; width: 100%; transition: opacity 0.2s; }
-  .calc-btn:hover { opacity: 0.85; }
-  .result-box { background: var(--bg); border-radius: 10px; padding: 1rem; margin-top: 1rem; display: none; }
-  .result-box.show { display: block; }
-  .result-row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
-  .result-row:last-child { border: none; font-weight: 800; font-size: 1rem; color: var(--accent); }
-  .source-note { font-size: 0.75rem; color: var(--sub); margin-top: 1rem; font-style: italic; }
-  @media (max-width: 600px) { .kpi-value { font-size: 1.5rem; } }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hidrogística - Soluciones de Rehabilitación Sin Zanja</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --hidro-blue: #0056b3;
+            --hidro-dark: #0a192f;
+            --hidro-accent: #00d4ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            scroll-behavior: smooth;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--hidro-blue), var(--hidro-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--hidro-accent);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .solution-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-bg {
+            background: linear-gradient(rgba(10, 25, 47, 0.85), rgba(10, 25, 47, 0.85)), 
+                        url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <button class="dark-toggle" onclick="toggleDark()" title="Modo oscuro">🌙</button>
-  <h1>🔧 Renovación de Tuberías Sin Zanja</h1>
-  <p>Tendencias globales, impacto económico y ahorro de tiempo · Datos 2024–2030</p>
-  <div class="header-meta">
-    <span class="badge">📊 Mercado Global</span>
-    <span class="badge">💰 Impacto Económico</span>
-    <span class="badge">⏱️ Ahorro de Tiempo</span>
-    <span class="badge">🌍 5 Regiones</span>
-  </div>
-</header>
-
-<nav>
-  <button class="active" onclick="showSection('overview', this)">📈 Panorama</button>
-  <button onclick="showSection('methods', this)">🛠️ Métodos</button>
-  <button onclick="showSection('impact', this)">💰 Impacto $</button>
-  <button onclick="showSection('time', this)">⏱️ Tiempo</button>
-  <button onclick="showSection('regions', this)">🌍 Regiones</button>
-  <button onclick="showSection('calculator', this)">🧮 Calculadora</button>
-</nav>
-
-<!-- ===== PANORAMA ===== -->
-<div class="container">
-<div id="overview" class="section active">
-  <div class="kpi-grid">
-    <div class="kpi blue">
-      <div class="kpi-label">Mercado Global 2024</div>
-      <div class="kpi-value">$7.3B</div>
-      <div class="kpi-sub">USD Billones</div>
-      <div class="kpi-trend up">▲ +6.2% vs 2023</div>
-      <svg class="sparkline" viewBox="0 0 100 40"><polyline points="0,35 20,30 40,25 60,18 80,12 100,8" fill="none" stroke="#2b6cb0" stroke-width="2.5"/></svg>
-    </div>
-    <div class="kpi teal">
-      <div class="kpi-label">Proyección 2030</div>
-      <div class="kpi-value">$9.7B</div>
-      <div class="kpi-sub">USD Billones</div>
-      <div class="kpi-trend up">▲ CAGR 4.5–7.1%</div>
-      <svg class="sparkline" viewBox="0 0 100 40"><polyline points="0,35 20,28 40,22 60,15 80,9 100,4" fill="none" stroke="#2c7a7b" stroke-width="2.5"/></svg>
-    </div>
-    <div class="kpi orange">
-      <div class="kpi-label">Ahorro vs Excavación</div>
-      <div class="kpi-value">30–50%</div>
-      <div class="kpi-sub">Reducción de costos</div>
-      <div class="kpi-trend up">▲ En proyectos urbanos</div>
-      <svg class="sparkline" viewBox="0 0 100 40"><polyline points="0,38 20,32 40,26 60,20 80,14 100,10" fill="none" stroke="#c05621" stroke-width="2.5"/></svg>
-    </div>
-    <div class="kpi green">
-      <div class="kpi-label">Reducción CO₂</div>
-      <div class="kpi-value">Hasta 90%</div>
-      <div class="kpi-sub">vs método tradicional</div>
-      <div class="kpi-trend up">▲ Fuente: Louisiana Tech</div>
-      <svg class="sparkline" viewBox="0 0 100 40"><polyline points="0,38 20,30 40,22 60,15 80,9 100,5" fill="none" stroke="#38a169" stroke-width="2.5"/></svg>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>📊 Evolución del Mercado Global (USD Billones)</h3>
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="setChartView('all', this)">Todo</button>
-      <button class="filter-btn" onclick="setChartView('hist', this)">Histórico</button>
-      <button class="filter-btn" onclick="setChartView('proj', this)">Proyección</button>
-    </div>
-    <div class="chart-wrap"><canvas id="marketChart"></canvas></div>
-    <p class="source-note">Fuentes: Stratview Research, Fortune Business Insights, Allied Market Research (2024–2026)</p>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <h3>🥧 Participación por Método (2024)</h3>
-      <div class="chart-wrap"><canvas id="methodPieChart"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>🌍 Participación por Región (2025)</h3>
-      <div class="chart-wrap"><canvas id="regionPieChart"></canvas></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== MÉTODOS ===== -->
-<div id="methods" class="section">
-  <div class="card">
-    <h3>🛠️ Principales Métodos Sin Zanja — Deep Dive</h3>
-    <p style="color:var(--sub);font-size:0.88rem;margin-bottom:1rem;">Haz clic en cada método para ver detalles técnicos, costos y aplicaciones.</p>
-  </div>
-
-  <details open>
-    <summary>🔵 CIPP — Tubería Curada en Sitio (Cured-In-Place Pipe) <span class="tag green">Más usado</span></summary>
-    <div class="details-body">
-      <p>El método más popular globalmente. Se inserta una manga flexible impregnada de resina dentro de la tubería dañada y se cura con agua caliente, vapor o luz UV, formando una nueva tubería dentro de la existente.</p>
-      <ul>
-        <li><strong>Participación de mercado:</strong> ~52% del total (tuberías <18 pulgadas)</li>
-        <li><strong>Diámetros:</strong> 4 a 120 pulgadas</li>
-        <li><strong>Ahorro de tiempo:</strong> 60–80% menos que excavación tradicional</li>
-        <li><strong>Ahorro de costo:</strong> 30–50% en proyectos urbanos</li>
-        <li><strong>Vida útil:</strong> 50+ años</li>
-        <li><strong>Aplicaciones:</strong> Alcantarillado, agua potable, drenaje pluvial</li>
-        <li><strong>Innovación reciente:</strong> UV-CIPP (curado ultravioleta) — más rápido y menor impacto ambiental</li>
-      </ul>
-      <p style="margin-top:0.8rem;"><strong>Caso real:</strong> Ciudad de Chicago — Granite Inliner rehabilitó 575,000 pies lineales de alcantarillado (10"–60") por USD $148M usando CIPP (2020).</p>
-    </div>
-  </details>
-
-  <details>
-    <summary>🟠 Pipe Bursting — Fragmentación de Tubería <span class="tag green">Reemplazo total</span></summary>
-    <div class="details-body">
-      <p>Una cabeza expansora rompe la tubería vieja hacia afuera mientras simultáneamente jala una tubería nueva de HDPE o PVC hacia adentro. Ideal cuando la tubería está muy deteriorada.</p>
-      <ul>
-        <li><strong>Ventaja clave:</strong> Permite aumentar el diámetro de la tubería (up-sizing)</li>
-        <li><strong>Ahorro de tiempo:</strong> 50–70% vs excavación</li>
-        <li><strong>Ahorro de costo:</strong> 20–40%</li>
-        <li><strong>Aplicaciones:</strong> Gas, agua potable, alcantarillado</li>
-        <li><strong>Limitación:</strong> No apto para tuberías con curvas pronunciadas</li>
-      </ul>
-    </div>
-  </details>
-
-  <details>
-    <summary>🟢 Slip-Lining — Revestimiento Deslizante <span class="tag green">Económico</span></summary>
-    <div class="details-body">
-      <p>Se inserta una tubería más pequeña dentro de la existente. Es el método más antiguo y económico de rehabilitación sin zanja.</p>
-      <ul>
-        <li><strong>Ventaja:</strong> Bajo costo, instalación rápida</li>
-        <li><strong>Desventaja:</strong> Reduce la capacidad hidráulica (diámetro menor)</li>
-        <li><strong>Ahorro de costo:</strong> 25–45%</li>
-        <li><strong>Aplicaciones:</strong> Tuberías de gran diámetro, acueductos</li>
-      </ul>
-    </div>
-  </details>
-
-  <details>
-    <summary>🟣 SIPP — Revestimiento Spray en Sitio <span class="tag green">Innovador</span></summary>
-    <div class="details-body">
-      <p>Se aplica un polímero o mortero de cemento mediante spray desde el interior de la tubería. Ideal para protección contra corrosión y restauración estructural parcial.</p>
-      <ul>
-        <li><strong>Ventaja:</strong> Mínima reducción de diámetro, excelente para corrosión</li>
-        <li><strong>Aplicaciones:</strong> Tuberías de agua potable, gas, industriales</li>
-        <li><strong>Tendencia:</strong> Crecimiento acelerado en Asia-Pacífico y Europa</li>
-        <li><strong>Innovación:</strong> Plataforma Petra — primer multi-herramienta híbrida del sector</li>
-      </ul>
-    </div>
-  </details>
-
-  <div class="card" style="margin-top:1.2rem;">
-    <h3>📊 Comparativa de Métodos</h3>
-    <div style="overflow-x:auto;">
-      <table class="compare-table">
-        <thead>
-          <tr><th>Método</th><th>Ahorro Costo</th><th>Ahorro Tiempo</th><th>Vida Útil</th><th>Mejor Para</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>CIPP</td><td><span class="tag green">30–50%</span></td><td><span class="tag green">60–80%</span></td><td>50+ años</td><td>Alcantarillado, agua</td></tr>
-          <tr><td>Pipe Bursting</td><td><span class="tag green">20–40%</span></td><td><span class="tag green">50–70%</span></td><td>50+ años</td><td>Reemplazo total</td></tr>
-          <tr><td>Slip-Lining</td><td><span class="tag green">25–45%</span></td><td><span class="tag green">40–60%</span></td><td>30–50 años</td><td>Gran diámetro</td></tr>
-          <tr><td>SIPP</td><td><span class="tag green">20–35%</span></td><td><span class="tag green">50–65%</span></td><td>20–30 años</td><td>Anticorrosión</td></tr>
-          <tr><td><strong>Excavación Tradicional</strong></td><td><span class="tag red">Referencia</span></td><td><span class="tag red">Referencia</span></td><td>Variable</td><td>Daño severo</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- ===== IMPACTO ECONÓMICO ===== -->
-<div id="impact" class="section">
-  <div class="kpi-grid">
-    <div class="kpi blue">
-      <div class="kpi-label">Ahorro Típico por Proyecto</div>
-      <div class="kpi-value">30–50%</div>
-      <div class="kpi-sub">vs excavación tradicional</div>
-      <div class="kpi-trend up">▲ En zonas urbanas</div>
-    </div>
-    <div class="kpi teal">
-      <div class="kpi-label">Inversión EE.UU. (Agua)</div>
-      <div class="kpi-value">$10B/año</div>
-      <div class="kpi-sub">Rehabilitación agua potable</div>
-      <div class="kpi-trend up">▲ Fuente: EPA</div>
-    </div>
-    <div class="kpi orange">
-      <div class="kpi-label">Inversión EE.UU. (Aguas Res.)</div>
-      <div class="kpi-value">$7B/año</div>
-      <div class="kpi-sub">Rehabilitación alcantarillado</div>
-      <div class="kpi-trend up">▲ Fuente: EPA</div>
-    </div>
-    <div class="kpi green">
-      <div class="kpi-label">Necesidad Global Infraestr.</div>
-      <div class="kpi-value">$3.6T</div>
-      <div class="kpi-sub">Solo EE.UU. al 2025 (ASCE)</div>
-      <div class="kpi-trend up">▲ Impulsa demanda</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>💰 Costo Comparativo: Sin Zanja vs Excavación Tradicional (USD/metro lineal)</h3>
-    <div class="chart-wrap"><canvas id="costChart"></canvas></div>
-    <p class="source-note">Valores referenciales basados en promedios de industria. Varían según diámetro, profundidad y ubicación.</p>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <h3>📉 Desglose de Ahorro por Categoría</h3>
-      <div class="chart-wrap"><canvas id="savingsChart"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>🏗️ Factores que Aumentan el Ahorro</h3>
-      <br>
-      <details>
-        <summary>🏙️ Zona Urbana Densa</summary>
-        <div class="details-body">
-          <p>En ciudades, la excavación implica cortar pavimento, desviar tráfico, reubicar servicios y restaurar la superficie. El costo de restauración puede superar el costo de la tubería misma.</p>
-          <ul>
-            <li>Corte y reposición de asfalto: $80–200/m²</li>
-            <li>Desvío de tráfico: $5,000–50,000/semana</li>
-            <li>Daño a negocios aledaños: difícil de cuantificar</li>
-            <li><strong>Ahorro sin zanja en zona urbana: hasta 60%</strong></li>
-          </ul>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-card py-4">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">H</div>
+                <span class="text-2xl font-bold text-slate-800">Hidrogística</span>
+            </div>
+            <div class="hidden md:flex space-x-8 font-medium">
+                <a href="#inicio" class="nav-link text-slate-600 hover:text-blue-600">Inicio</a>
+                <a href="#soluciones" class="nav-link text-slate-600 hover:text-blue-600">Soluciones</a>
+                <a href="#impacto" class="nav-link text-slate-600 hover:text-blue-600">Impacto</a>
+                <a href="#calculadora" class="nav-link text-slate-600 hover:text-blue-600">Calculadora</a>
+                <a href="#contacto" class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition shadow-lg">Contacto</a>
+            </div>
         </div>
-      </details>
-      <details>
-        <summary>🌊 Cruce de Ríos o Vías</summary>
-        <div class="details-body">
-          <p>Cruzar ríos, autopistas o vías férreas con excavación es extremadamente costoso o imposible. La perforación direccional horizontal (HDD) lo hace viable.</p>
-          <ul>
-            <li>Excavación en cruce de río: $500,000–$2M+</li>
-            <li>HDD en cruce de río: $100,000–$400,000</li>
-            <li><strong>Ahorro: 60–80%</strong></li>
-          </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero-bg min-h-screen flex items-center pt-20">
+        <div class="container mx-auto px-6 text-center md:text-left">
+            <div class="max-w-3xl">
+                <span class="inline-block px-4 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-semibold mb-6 border border-blue-500/30">
+                    <i class="fas fa-map-marker-alt mr-2"></i>Líderes en Chile
+                </span>
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+                    Rehabilitación de Tuberías <span class="text-blue-400">Sin Zanja</span>
+                </h1>
+                <p class="text-xl text-slate-300 mb-10 leading-relaxed">
+                    Soluciones tecnológicas avanzadas para la infraestructura hídrica de Chile. 
+                    Reparamos sin excavar, reduciendo costos, tiempos y el impacto social en nuestras ciudades.
+                </p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
+                    <a href="#soluciones" class="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition shadow-xl flex items-center justify-center">
+                        Ver Soluciones <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#impacto" class="px-8 py-4 bg-white/10 text-white border border-white/20 rounded-xl font-bold hover:bg-white/20 transition backdrop-blur-sm flex items-center justify-center">
+                        Impacto en Chile
+                    </a>
+                </div>
+            </div>
         </div>
-      </details>
-      <details>
-        <summary>🏛️ Zonas Históricas o Patrimoniales</summary>
-        <div class="details-body">
-          <p>En centros históricos, la excavación puede estar prohibida o requerir permisos especiales y arqueólogos. Sin zanja es la única opción viable.</p>
-          <ul>
-            <li>Evita daño a estructuras históricas</li>
-            <li>Sin permisos de excavación especiales</li>
-            <li><strong>Ahorro: 50–70% + viabilidad del proyecto</strong></li>
-          </ul>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-12 bg-white border-b">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">+65k</div>
+                    <div class="text-slate-500 text-sm uppercase tracking-wider font-semibold">Metros Rehabilitados</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">50+</div>
+                    <div class="text-slate-500 text-sm uppercase tracking-wider font-semibold">Años Vida Útil</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">-75%</div>
+                    <div class="text-slate-500 text-sm uppercase tracking-wider font-semibold">Reducción de Fugas</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">100%</div>
+                    <div class="text-slate-500 text-sm uppercase tracking-wider font-semibold">Sin Excavación</div>
+                </div>
+            </div>
         </div>
-      </details>
-      <details>
-        <summary>🌿 Zonas Ambientalmente Sensibles</summary>
-        <div class="details-body">
-          <p>Parques, humedales, zonas protegidas. La excavación puede estar prohibida por regulaciones ambientales.</p>
-          <ul>
-            <li>Evita multas y sanciones ambientales</li>
-            <li>Reducción de CO₂ hasta 90%</li>
-            <li><strong>Ahorro: 40–60% + cumplimiento regulatorio</strong></li>
-          </ul>
+    </section>
+
+    <!-- Solutions Section -->
+    <section id="soluciones" class="py-24 bg-slate-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-slate-900 mb-4">Nuestras Tecnologías</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Contamos con las soluciones más avanzadas del mercado global, adaptadas a la realidad geográfica y técnica de Chile.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Curapipe -->
+                <div class="solution-card bg-white p-8 rounded-2xl border border-slate-200">
+                    <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6 text-2xl">
+                        <i class="fas fa-droplet"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Curapipe</h3>
+                    <p class="text-slate-600 mb-6">Tecnología TALR (Trenchless Automated Leak Repair). Repara múltiples fugas simultáneamente desde el interior.</p>
+                    <ul class="space-y-3 text-sm text-slate-500 mb-8">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Ideal para redes de agua potable</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Sin interrupción de servicio</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Curado rápido in-situ</li>
+                    </ul>
+                </div>
+
+                <!-- Impreg GL16 -->
+                <div class="solution-card bg-white p-8 rounded-2xl border border-slate-200">
+                    <div class="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center mb-6 text-2xl">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Impreg GL16</h3>
+                    <p class="text-slate-600 mb-6">Manga de fibra de vidrio curada con luz UV. Máxima resistencia estructural con mínimo espesor.</p>
+                    <ul class="space-y-3 text-sm text-slate-500 mb-8">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Curado UV ultra rápido</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Vida útil de 50 años</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Resistencia química extrema</li>
+                    </ul>
+                </div>
+
+                <!-- ASOE -->
+                <div class="solution-card bg-white p-8 rounded-2xl border border-slate-200">
+                    <div class="w-14 h-14 bg-cyan-100 text-cyan-600 rounded-xl flex items-center justify-center mb-6 text-2xl">
+                        <i class="fas fa-pipe-valve"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">ASOE</h3>
+                    <p class="text-slate-600 mb-6">Sistemas de revestimiento flexible para tuberías de presión y gravedad de gran diámetro.</p>
+                    <ul class="space-y-3 text-sm text-slate-500 mb-8">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Instalación en tramos largos</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Alta flexibilidad sísmica</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Bajo coeficiente de fricción</li>
+                    </ul>
+                </div>
+
+                <!-- Nuflow -->
+                <div class="solution-card bg-white p-8 rounded-2xl border border-slate-200">
+                    <div class="w-14 h-14 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center mb-6 text-2xl">
+                        <i class="fas fa-arrows-spin"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Nuflow</h3>
+                    <p class="text-slate-600 mb-6">Revestimiento epóxico estructural para diámetros pequeños y conexiones domiciliarias.</p>
+                    <ul class="space-y-3 text-sm text-slate-500 mb-8">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Ideal para edificios y casas</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Evita romper pisos y muros</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Certificación NSF/ANSI 61</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </details>
-    </div>
-  </div>
-</div>
+    </section>
 
-<!-- ===== TIEMPO ===== -->
-<div id="time" class="section">
-  <div class="kpi-grid">
-    <div class="kpi blue">
-      <div class="kpi-label">Reducción de Tiempo</div>
-      <div class="kpi-value">60–80%</div>
-      <div class="kpi-sub">CIPP vs excavación</div>
-      <div class="kpi-trend up">▲ Proyectos típicos</div>
-    </div>
-    <div class="kpi teal">
-      <div class="kpi-label">Velocidad CIPP</div>
-      <div class="kpi-value">100–300m</div>
-      <div class="kpi-sub">Por día de trabajo</div>
-      <div class="kpi-trend up">▲ Diámetros medianos</div>
-    </div>
-    <div class="kpi orange">
-      <div class="kpi-label">Interrupción de Servicio</div>
-      <div class="kpi-value">Horas</div>
-      <div class="kpi-sub">vs días/semanas tradicional</div>
-      <div class="kpi-trend up">▲ Mínima disrupción</div>
-    </div>
-    <div class="kpi green">
-      <div class="kpi-label">Retorno al Servicio</div>
-      <div class="kpi-value"><24h</div>
-      <div class="kpi-sub">Mayoría de proyectos CIPP</div>
-      <div class="kpi-trend up">▲ vs 1–4 semanas trad.</div>
-    </div>
-  </div>
+    <!-- Impact Section -->
+    <section id="impacto" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="lg:w-1/2">
+                    <h2 class="text-4xl font-bold text-slate-900 mb-6">Impacto en Tiempo y Dinero</h2>
+                    <p class="text-lg text-slate-600 mb-8">
+                        La tecnología sin zanja no es solo una alternativa, es la evolución necesaria para las ciudades modernas. 
+                        En Chile, donde el tráfico y la densidad urbana son críticos, Hidrogística ofrece ahorros tangibles.
+                    </p>
 
-  <div class="card">
-    <h3>⏱️ Comparativa de Duración de Proyecto (días) — 500 metros lineales</h3>
-    <div class="chart-wrap"><canvas id="timeChart"></canvas></div>
-    <p class="source-note">Estimaciones basadas en proyectos típicos urbanos de 500m lineales, diámetro 200–400mm.</p>
-  </div>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl">Ahorro de Tiempo: 60-80%</h4>
+                                <p class="text-slate-500">Proyectos que tomaban meses se reducen a semanas o días.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl">Ahorro en Costos Indirectos: 90%</h4>
+                                <p class="text-slate-500">Eliminamos costos de pavimentación, desvíos de tránsito y multas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 w-full">
+                    <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-inner">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <div class="card">
-    <h3>📅 Fases del Proyecto: Sin Zanja vs Tradicional</h3>
-    <div style="overflow-x:auto;">
-      <table class="compare-table">
-        <thead>
-          <tr><th>Fase</th><th>Excavación Tradicional</th><th>Sin Zanja (CIPP)</th><th>Ahorro</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Inspección previa</td><td>3–5 días</td><td>1–2 días (CCTV)</td><td><span class="tag green">60%</span></td></tr>
-          <tr><td>Permisos y señalización</td><td>5–15 días</td><td>2–5 días</td><td><span class="tag green">65%</span></td></tr>
-          <tr><td>Movilización de equipos</td><td>2–4 días</td><td>1–2 días</td><td><span class="tag green">50%</span></td></tr>
-          <tr><td>Ejecución (500m)</td><td>15–30 días</td><td>3–7 días</td><td><span class="tag green">75%</span></td></tr>
-          <tr><td>Restauración superficie</td><td>10–20 días</td><td>0–1 días</td><td><span class="tag green">95%</span></td></tr>
-          <tr><td>Retorno al servicio</td><td>1–4 semanas</td><td><24 horas</td><td><span class="tag green">90%</span></td></tr>
-          <tr><td><strong>TOTAL</strong></td><td><strong>35–74 días</strong></td><td><strong>7–17 días</strong></td><td><span class="tag green"><strong>~70%</strong></span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+    <!-- Calculator Section -->
+    <section id="calculadora" class="py-24 bg-slate-900 text-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto bg-slate-800 p-10 rounded-3xl border border-slate-700 shadow-2xl">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold mb-4">Calculadora de Ahorro Estimado</h2>
+                    <p class="text-slate-400">Proyecta el impacto de usar tecnología Hidrogística en tu próximo proyecto.</p>
+                </div>
 
-  <div class="card">
-    <h3>📊 Impacto del Tiempo en Costos Indirectos</h3>
-    <div class="chart-wrap"><canvas id="indirectChart"></canvas></div>
-    <p class="source-note">Costos indirectos por día de obra en zona urbana (estimaciones de industria).</p>
-  </div>
-</div>
+                <div class="grid md:grid-cols-2 gap-8 mb-10">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-400 mb-2">Metros a Rehabilitar</label>
+                        <input type="number" id="calc-meters" value="100" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-400 mb-2">Tecnología Sugerida</label>
+                        <select id="calc-tech" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none transition">
+                            <option value="curapipe">Curapipe (Fugas)</option>
+                            <option value="impreg">Impreg GL16 (Estructural)</option>
+                            <option value="asoe">ASOE (Presión)</option>
+                            <option value="nuflow">Nuflow (Domiciliario)</option>
+                        </select>
+                    </div>
+                </div>
 
-<!-- ===== REGIONES ===== -->
-<div id="regions" class="section">
-  <div class="card">
-    <h3>🌍 Mercado por Región (2025) — USD Billones</h3>
-    <div class="chart-wrap"><canvas id="regionChart"></canvas></div>
-  </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-slate-900/50 p-6 rounded-2xl border border-blue-500/20 text-center">
+                        <div class="text-slate-400 text-xs uppercase mb-2">Días Ahorrados</div>
+                        <div id="res-days" class="text-3xl font-bold text-blue-400">12</div>
+                    </div>
+                    <div class="bg-slate-900/50 p-6 rounded-2xl border border-green-500/20 text-center">
+                        <div class="text-slate-400 text-xs uppercase mb-2">Ahorro Est. (USD)</div>
+                        <div id="res-money" class="text-3xl font-bold text-green-400">$15.400</div>
+                    </div>
+                    <div class="bg-slate-900/50 p-6 rounded-2xl border border-purple-500/20 text-center">
+                        <div class="text-slate-400 text-xs uppercase mb-2">Reducción CO2</div>
+                        <div id="res-co2" class="text-3xl font-bold text-purple-400">4.2 Ton</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <div class="grid-2">
-    <details open>
-      <summary>🇺🇸 Norteamérica — Líder Mundial (36.2%)</summary>
-      <div class="details-body">
-        <ul>
-          <li><strong>Mercado 2025:</strong> ~$1.88B (EE.UU. + Canadá)</li>
-          <li><strong>Driver principal:</strong> Infraestructura envejecida — 222,000+ puentes requieren reparación (ARTBA)</li>
-          <li><strong>Regulación:</strong> ASTM, NASSCO, EPA impulsan adopción</li>
-          <li><strong>Inversión EPA:</strong> $17B/año en rehabilitación de tuberías de agua y aguas residuales</li>
-          <li><strong>Caso destacado:</strong> Chicago — $148M en CIPP para 575,000 pies lineales de alcantarillado</li>
-        </ul>
-      </div>
-    </details>
-    <details>
-      <summary>🇪🇺 Europa — Regulación Estricta</summary>
-      <div class="details-body">
-        <ul>
-          <li><strong>Alemania 2026:</strong> ~$0.29B</li>
-          <li><strong>Reino Unido 2026:</strong> ~$0.20B</li>
-          <li><strong>Driver:</strong> Regulaciones ambientales estrictas + infraestructura envejecida</li>
-          <li><strong>Tendencia:</strong> UV-CIPP con liner de fibra de vidrio (GRP) en auge</li>
-          <li><strong>Caso:</strong> De Hemmen, Holanda — rehabilitación DN 1500 con liner UV-GRP (2022)</li>
-        </ul>
-      </div>
-    </details>
-    <details>
-      <summary>🌏 Asia-Pacífico — Crecimiento Más Rápido</summary>
-      <div class="details-body">
-        <ul>
-          <li><strong>China 2026:</strong> ~$0.30B | <strong>Japón:</strong> ~$0.11B | <strong>India:</strong> ~$0.05B</li>
-          <li><strong>Driver:</strong> Urbanización acelerada + inversión en infraestructura</li>
-          <li><strong>India:</strong> Misión AMRUT 2.0 — mejora de agua, alcantarillado y drenaje en ciudades</li>
-          <li><strong>China:</strong> Gobierno promueve UV-CIPP, SIPP y FIPP en redes de alcantarillado</li>
-          <li><strong>CAGR proyectado:</strong> Mayor que cualquier otra región</li>
-        </ul>
-      </div>
-    </details>
-    <details>
-      <summary>🌎 Latinoamérica & Medio Oriente — Emergentes</summary>
-      <div class="details-body">
-        <ul>
-          <li><strong>Driver LATAM:</strong> Urbanización + déficit histórico de infraestructura sanitaria</li>
-          <li><strong>Driver MEA:</strong> Condiciones extremas (desierto, roca) hacen inviable la excavación</li>
-          <li><strong>Oportunidad:</strong> Mercados con menor penetración = mayor potencial de crecimiento</li>
-          <li><strong>Tendencia:</strong> Asociaciones público-privadas para modernización de redes</li>
-        </ul>
-      </div>
-    </details>
-  </div>
-</div>
+    <!-- Contact Section -->
+    <section id="contacto" class="py-24 bg-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold text-slate-900 mb-6">¿Listo para modernizar tu red?</h2>
+            <p class="text-xl text-slate-600 mb-12 max-w-2xl mx-auto">
+                Nuestro equipo técnico en Chile está listo para evaluar tu proyecto y proponer la mejor solución sin zanja.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-12">
+                <a href="mailto:sfuenzalida@hidrogistica.cl" class="flex items-center space-x-4 group">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl group-hover:bg-blue-600 group-hover:text-white transition duration-300">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="text-left">
+                        <div class="text-sm text-slate-400 uppercase font-bold">Escríbenos</div>
+                        <div class="text-lg font-bold text-slate-800">sfuenzalida@hidrogistica.cl</div>
+                    </div>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center text-2xl">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="text-left">
+                        <div class="text-sm text-slate-400 uppercase font-bold">Web</div>
+                        <div class="text-lg font-bold text-slate-800">www.hidrogistica.cl</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- ===== CALCULADORA ===== -->
-<div id="calculator" class="section">
-  <div class="card" style="margin-bottom:1.2rem;">
-    <h3>🧮 Calculadora de Ahorro — Sin Zanja vs Excavación Tradicional</h3>
-    <p style="color:var(--sub);font-size:0.88rem;">Ingresa los datos de tu proyecto para estimar el ahorro potencial en costo y tiempo.</p>
-  </div>
+    <!-- Footer -->
+    <footer class="py-12 bg-slate-900 border-t border-slate-800">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex items-center justify-center space-x-2 mb-6">
+                <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold">H</div>
+                <span class="text-xl font-bold text-white">Hidrogística</span>
+            </div>
+            <p class="text-slate-500 text-sm">© 2026 Hidrogística Chile. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 
-  <div class="grid-2">
-    <div class="roi-calc">
-      <h3>📋 Datos del Proyecto</h3>
-      <div class="input-group">
-        <label>Longitud de tubería (metros)</label>
-        <input type="number" id="length" value="500" min="10">
-      </div>
-      <div class="input-group">
-        <label>Diámetro de tubería</label>
-        <select id="diameter">
-          <option value="small">Pequeño (<18 pulg / <450mm)</option>
-          <option value="medium" selected>Mediano (18–36 pulg / 450–900mm)</option>
-          <option value="large">Grande (>36 pulg / >900mm)</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label>Tipo de zona</label>
-        <select id="zone">
-          <option value="urban" selected>Urbana densa</option>
-          <option value="suburban">Suburbana</option>
-          <option value="rural">Rural / Industrial</option>
-          <option value="crossing">Cruce de río/vía</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label>Método sin zanja a usar</label>
-        <select id="method">
-          <option value="cipp" selected>CIPP (Curado en Sitio)</option>
-          <option value="burst">Pipe Bursting</option>
-          <option value="slip">Slip-Lining</option>
-          <option value="sipp">SIPP (Spray)</option>
-        </select>
-      </div>
-      <button class="calc-btn" onclick="calculate()">⚡ Calcular Ahorro</button>
-    </div>
+    <script>
+        // Chart Initialization
+        const ctx = document.getElementById('comparisonChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Excavación Tradicional', 'Tecnología Hidrogística'],
+                datasets: [{
+                    label: 'Días de Ejecución (100m)',
+                    data: [25, 4],
+                    backgroundColor: ['#cbd5e1', '#2563eb'],
+                    borderRadius: 8
+                }, {
+                    label: 'Costo Social/Indirecto (Escala 1-10)',
+                    data: [9, 1],
+                    backgroundColor: ['#94a3b8', '#60a5fa'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
 
-    <div class="roi-calc">
-      <h3>📊 Resultados Estimados</h3>
-      <div class="result-box" id="resultBox">
-        <div class="result-row"><span>Costo excavación tradicional</span><span id="r-trad">—</span></div>
-        <div class="result-row"><span>Costo método sin zanja</span><span id="r-trench">—</span></div>
-        <div class="result-row"><span>Ahorro en costo</span><span id="r-save">—</span></div>
-        <div class="result-row"><span>Tiempo excavación tradicional</span><span id="r-ttime">—</span></div>
-        <div class="result-row"><span>Tiempo sin zanja</span><span id="r-ntime">—</span></div>
-        <div class="result-row"><span>Ahorro en tiempo</span><span id="r-tsave">—</span></div>
-        <div class="result-row"><span>Reducción de CO₂ estimada</span><span id="r-co2">—</span></div>
-        <div class="result-row"><span>💰 AHORRO TOTAL ESTIMADO</span><span id="r-total">—</span></div>
-      </div>
-      <div id="noResult" style="color:var(--sub);font-size:0.9rem;padding:1rem 0;">
-        Completa el formulario y presiona "Calcular Ahorro" para ver los resultados.
-      </div>
-      <p class="source-note">⚠️ Valores referenciales. El ahorro real depende de condiciones específicas del proyecto. Consulta con un especialista.</p>
-    </div>
-  </div>
+        // Calculator Logic
+        const inputs = ['calc-meters', 'calc-tech'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', calculate);
+        });
 
-  <div class="card" style="margin-top:1.2rem;">
-    <h3>📈 Proyección de Ahorro Acumulado (10 años de programa de rehabilitación)</h3>
-    <div class="chart-wrap"><canvas id="roiChart"></canvas></div>
-    <p class="source-note">Asume 500m/año de rehabilitación con ahorro promedio del 40% vs excavación tradicional.</p>
-  </div>
-</div>
-</div><!-- /container -->
+        function calculate() {
+            const meters = parseFloat(document.getElementById('calc-meters').value) || 0;
+            const tech = document.getElementById('calc-tech').value;
 
-<footer style="background:var(--card);border-top:1px solid var(--border);padding:1.5rem;text-align:center;color:var(--sub);font-size:0.82rem;margin-top:2rem;">
-  <p>📊 Datos basados en: Stratview Research · Fortune Business Insights · Allied Market Research · Market Research Future · GlobeNewswire · EPA · ASCE · Louisiana Tech University</p>
-  <p style="margin-top:0.4rem;">Presentación generada con IA · 2026 · Todos los valores son referenciales</p>
-</footer>
+            let factorDays = 0.12;
+            let factorMoney = 154;
+            let factorCO2 = 0.042;
 
-<script>
-// ===== DARK MODE =====
-function toggleDark() {
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  document.querySelector('.dark-toggle').textContent = isDark ? '🌙' : '☀️';
-  updateChartColors();
-}
+            if (tech === 'impreg') { factorDays = 0.08; factorMoney = 180; }
+            if (tech === 'asoe') { factorDays = 0.15; factorMoney = 210; }
+            if (tech === 'nuflow') { factorDays = 0.05; factorMoney = 95; }
 
-// ===== NAV =====
-function showSection(id, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
+            document.getElementById('res-days').innerText = Math.ceil(meters * factorDays);
+            document.getElementById('res-money').innerText = '$' + (meters * factorMoney).toLocaleString();
+            document.getElementById('res-co2').innerText = (meters * factorCO2).toFixed(1) + ' Ton';
+        }
 
-// ===== CHART COLORS =====
-function getColor(alpha) {
-  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-  return dark ? `rgba(241,245,249,${alpha})` : `rgba(26,32,44,${alpha})`;
-}
-
-// ===== MARKET CHART =====
-const marketLabels = ['2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'];
-const marketHist   = [5.2, 5.5, 5.9, 6.9, 7.3, 7.8, null, null, null, null, null];
-const marketProj   = [null, null, null, null, null, 7.8, 8.2, 8.6, 9.0, 9.4, 9.7];
-
-let marketChart = new Chart(document.getElementById('marketChart'), {
-  type: 'bar',
-  data: {
-    labels: marketLabels,
-    datasets: [
-      { label: 'Histórico (USD B)', data: marketHist, backgroundColor: 'rgba(43,108,176,0.75)', borderRadius: 6 },
-      { label: 'Proyección (USD B)', data: marketProj, backgroundColor: 'rgba(44,122,123,0.6)', borderRadius: 6, borderDash: [5,5] }
-    ]
-  },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: false, min: 4 } } }
-});
-
-function setChartView(view, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  if (view === 'hist') {
-    marketChart.data.datasets[0].data = marketHist;
-    marketChart.data.datasets[1].data = Array(11).fill(null);
-  } else if (view === 'proj') {
-    marketChart.data.datasets[0].data = Array(11).fill(null);
-    marketChart.data.datasets[1].data = marketProj;
-  } else {
-    marketChart.data.datasets[0].data = marketHist;
-    marketChart.data.datasets[1].data = marketProj;
-  }
-  marketChart.update();
-}
-
-// ===== PIE CHARTS =====
-new Chart(document.getElementById('methodPieChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['CIPP', 'Pipe Bursting', 'Slip-Lining', 'SIPP', 'Otros'],
-    datasets: [{ data: [52, 18, 14, 10, 6], backgroundColor: ['#2b6cb0','#2c7a7b','#c05621','#6b46c1','#718096'] }]
-  },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-});
-
-new Chart(document.getElementById('regionPieChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Norteamérica', 'Europa', 'Asia-Pacífico', 'LATAM', 'MEA'],
-    datasets: [{ data: [36.2, 28, 24, 7, 4.8], backgroundColor: ['#2b6cb0','#2c7a7b','#c05621','#6b46c1','#38a169'] }]
-  },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-});
-
-// ===== COST CHART =====
-new Chart(document.getElementById('costChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Zona Rural', 'Zona Suburbana', 'Zona Urbana', 'Cruce Río/Vía', 'Zona Histórica'],
-    datasets: [
-      { label: 'Excavación Tradicional (USD/m)', data: [350, 600, 1200, 4000, 2500], backgroundColor: 'rgba(197,48,48,0.75)', borderRadius: 6 },
-      { label: 'Sin Zanja CIPP (USD/m)', data: [250, 380, 650, 900, 700], backgroundColor: 'rgba(43,108,176,0.75)', borderRadius: 6 }
-    ]
-  },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
-});
-
-// ===== SAVINGS CHART =====
-new Chart(document.getElementById('savingsChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Mano de Obra', 'Restauración Superficie', 'Gestión Tráfico', 'Equipos', 'Tiempo de Obra', 'Emisiones CO₂'],
-    datasets: [{ label: 'Ahorro % vs Excavación', data: [45, 85, 70, 30, 70, 80], backgroundColor: 'rgba(44,122,123,0.75)', borderRadius: 6 }]
-  },
-  options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { max: 100, ticks: { callback: v => v + '%' } } } }
-});
-
-// ===== TIME CHART =====
-new Chart(document.getElementById('timeChart'), {
-  type: 'bar',
-  data: {
-    labels: ['CIPP', 'Pipe Bursting', 'Slip-Lining', 'SIPP', 'Excavación Tradicional'],
-    datasets: [
-      { label: 'Mínimo (días)', data: [7, 8, 6, 7, 35], backgroundColor: 'rgba(43,108,176,0.6)', borderRadius: 6 },
-      { label: 'Máximo (días)', data: [17, 20, 15, 18, 74], backgroundColor: 'rgba(43,108,176,0.9)', borderRadius: 6 }
-    ]
-  },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'Días' } } } }
-});
-
-// ===== INDIRECT COST CHART =====
-new Chart(document.getElementById('indirectChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Desvío tráfico', 'Pérdida comercio local', 'Ruido/polvo vecinos', 'Gestión residuos', 'Riesgo daño servicios', 'Total indirecto/día'],
-    datasets: [
-      { label: 'Excavación Tradicional (USD/día)', data: [3000, 5000, 1000, 800, 2000, 11800], backgroundColor: 'rgba(197,48,48,0.7)', borderRadius: 6 },
-      { label: 'Sin Zanja (USD/día)', data: [500, 500, 100, 100, 200, 1400], backgroundColor: 'rgba(56,161,105,0.7)', borderRadius: 6 }
-    ]
-  },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
-});
-
-// ===== REGION CHART =====
-new Chart(document.getElementById('regionChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Norteamérica', 'Europa', 'Asia-Pacífico', 'LATAM', 'MEA'],
-    datasets: [
-      { label: '2024 (USD B)', data: [2.64, 2.04, 1.75, 0.51, 0.35], backgroundColor: 'rgba(43,108,176,0.7)', borderRadius: 6 },
-      { label: '2030 proy. (USD B)', data: [3.5, 2.7, 2.5, 0.6, 0.4], backgroundColor: 'rgba(44,122,123,0.7)', borderRadius: 6 }
-    ]
-  },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
-});
-
-// ===== ROI CHART =====
-const roiYears = ['Año 1','Año 2','Año 3','Año 4','Año 5','Año 6','Año 7','Año 8','Año 9','Año 10'];
-const roiTrad = roiYears.map((_, i) => Math.round(600000 * (i + 1)));
-const roiTrench = roiYears.map((_, i) => Math.round(360000 * (i + 1)));
-new Chart(document.getElementById('roiChart'), {
-  type: 'line',
-  data: {
-    labels: roiYears,
-    datasets: [
-      { label: 'Costo Acumulado Excavación Trad.', data: roiTrad, borderColor: '#c53030', backgroundColor: 'rgba(197,48,48,0.1)', fill: true, tension: 0.3 },
-      { label: 'Costo Acumulado Sin Zanja', data: roiTrench, borderColor: '#2b6cb0', backgroundColor: 'rgba(43,108,176,0.1)', fill: true, tension: 0.3 }
-    ]
-  },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
-});
-
-// ===== CALCULATOR =====
-function calculate() {
-  const length = parseFloat(document.getElementById('length').value) || 500;
-  const diameter = document.getElementById('diameter').value;
-  const zone = document.getElementById('zone').value;
-  const method = document.getElementById('method').value;
-
-  const baseCosts = { small: 400, medium: 700, large: 1200 };
-  const zoneMultiplier = { urban: 1.8, suburban: 1.2, rural: 1.0, crossing: 4.5 };
-  const methodSavings = { cipp: 0.42, burst: 0.32, slip: 0.38, sipp: 0.28 };
-  const timeSavings = { cipp: 0.72, burst: 0.62, slip: 0.55, sipp: 0.60 };
-
-  const baseCost = baseCosts[diameter];
-  const zm = zoneMultiplier[zone];
-  const tradCost = Math.round(baseCost * zm * length);
-  const trenchCost = Math.round(tradCost * (1 - methodSavings[method]));
-  const saving = tradCost - trenchCost;
-
-  const tradDays = Math.round((length / 20) + 20);
-  const trenchDays = Math.round(tradDays * (1 - timeSavings[method]));
-  const daysSaved = tradDays - trenchDays;
-
-  const co2Saved = Math.round(length * 0.8 * 0.7);
-
-  document.getElementById('r-trad').textContent = '$' + tradCost.toLocaleString();
-  document.getElementById('r-trench').textContent = '$' + trenchCost.toLocaleString();
-  document.getElementById('r-save').textContent = '$' + saving.toLocaleString() + ' (' + Math.round(methodSavings[method]*100) + '%)';
-  document.getElementById('r-ttime').textContent = tradDays + ' días';
-  document.getElementById('r-ntime').textContent = trenchDays + ' días';
-  document.getElementById('r-tsave').textContent = daysSaved + ' días (' + Math.round(timeSavings[method]*100) + '%)';
-  document.getElementById('r-co2').textContent = co2Saved + ' ton CO₂ eq.';
-  document.getElementById('r-total').textContent = '$' + saving.toLocaleString() + ' USD';
-
-  document.getElementById('resultBox').classList.add('show');
-  document.getElementById('noResult').style.display = 'none';
-}
-
-function updateChartColors() { /* charts auto-update via CSS vars */ }
-</script>
+        calculate();
+    </script>
 </body>
 </html>
