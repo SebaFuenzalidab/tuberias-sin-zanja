@@ -1,1151 +1,923 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hidrogística | Rehabilitación de Infraestructura Hídrica Sin Zanja</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-dark: #0a1f44;
-            --primary-blue: #1e3a8a;
-            --accent-cyan: #06b6d4;
-            --accent-cyan-light: #22d3ee;
-            --white: #ffffff;
-            --gray-light: #f1f5f9;
-            --gray-medium: #94a3b8;
-            --gray-dark: #475569;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: var(--gray-dark);
-            background: var(--white);
-            overflow-x: hidden;
-        }
-
-        /* Header & Navigation */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(10, 31, 68, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            box-shadow: var(--shadow-md);
-        }
-
-        nav {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--white);
-            letter-spacing: -0.5px;
-        }
-
-        .logo span {
-            color: var(--accent-cyan);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-cyan);
-        }
-
-        /* Hero Section */
-        .hero {
-            margin-top: 70px;
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
-            color: var(--white);
-            padding: 8rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)" /></svg>');
-            opacity: 0.3;
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-            letter-spacing: -1px;
-        }
-
-        .hero .subtitle {
-            font-size: 1.5rem;
-            color: var(--accent-cyan-light);
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 900px;
-            margin: 0 auto 3rem;
-            line-height: 1.8;
-            opacity: 0.95;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: var(--accent-cyan);
-            color: var(--primary-dark);
-            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-cyan-light);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 28px rgba(6, 182, 212, 0.5);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            border: 2px solid var(--white);
-        }
-
-        .btn-secondary:hover {
-            background: var(--white);
-            color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        /* Section Styles */
-        section {
-            padding: 6rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.75rem;
-            color: var(--primary-dark);
-            margin-bottom: 1rem;
-            font-weight: 800;
-        }
-
-        .section-header .tagline {
-            font-size: 1.25rem;
-            color: var(--accent-cyan);
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            font-size: 1.15rem;
-            color: var(--gray-dark);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* Problem Section */
-        .problem-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .problem-card {
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-            border-top: 4px solid var(--accent-cyan);
-        }
-
-        .problem-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .problem-card .icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-
-        .problem-card h3 {
-            font-size: 1.5rem;
-            color: var(--primary-dark);
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .problem-card .stat {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--accent-cyan);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .problem-card p {
-            color: var(--gray-dark);
-            line-height: 1.7;
-        }
-
-        /* Technologies Section */
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            margin-top: 3rem;
-        }
-
-        .tech-card {
-            background: linear-gradient(135deg, var(--white) 0%, var(--gray-light) 100%);
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(6, 182, 212, 0.1);
-        }
-
-        .tech-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--accent-cyan);
-        }
-
-        .tech-card .tech-name {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 3px solid var(--accent-cyan);
-        }
-
-        .tech-detail {
-            margin-bottom: 1.5rem;
-        }
-
-        .tech-detail-label {
-            font-weight: 700;
-            color: var(--accent-cyan);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
-        }
-
-        .tech-detail-content {
-            color: var(--gray-dark);
-            line-height: 1.6;
-        }
-
-        /* Comparison Section */
-        .comparison-container {
-            background: var(--gray-light);
-            padding: 3rem;
-            border-radius: 16px;
-            margin-top: 3rem;
-        }
-
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--white);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-        }
-
-        .comparison-table th {
-            background: var(--primary-dark);
-            color: var(--white);
-            padding: 1.5rem;
-            text-align: left;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .comparison-table td {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--gray-light);
-        }
-
-        .comparison-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .comparison-table .metric {
-            font-weight: 700;
-            color: var(--primary-dark);
-        }
-
-        .comparison-table .traditional {
-            color: #dc2626;
-        }
-
-        .comparison-table .trenchless {
-            color: #16a34a;
-            font-weight: 600;
-        }
-
-        /* Calculator Section */
-        .calculator {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
-            padding: 4rem 3rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            color: var(--white);
-            margin-top: 3rem;
-        }
-
-        .calculator h3 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            font-weight: 800;
-        }
-
-        .calculator-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .form-group input,
-        .form-group select {
-            padding: 1rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.95);
-            color: var(--primary-dark);
-            font-weight: 500;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: 3px solid var(--accent-cyan);
-        }
-
-        .calculate-btn {
-            grid-column: 1 / -1;
-            padding: 1.25rem;
-            background: var(--accent-cyan);
-            color: var(--primary-dark);
-            border: none;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
-        }
-
-        .calculate-btn:hover {
-            background: var(--accent-cyan-light);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 28px rgba(6, 182, 212, 0.5);
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .result-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .result-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--accent-cyan-light);
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .result-label {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        /* Use Cases Section */
-        .use-cases-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .use-case-card {
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-            border-left: 6px solid var(--accent-cyan);
-        }
-
-        .use-case-card:hover {
-            transform: translateX(8px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .use-case-card h4 {
-            font-size: 1.5rem;
-            color: var(--primary-dark);
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .use-case-card ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .use-case-card li {
-            padding: 0.5rem 0;
-            color: var(--gray-dark);
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .use-case-card li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--accent-cyan);
-            font-weight: 700;
-        }
-
-        /* Impact Section */
-        .impact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .impact-item {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .impact-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .impact-item h4 {
-            font-size: 1.3rem;
-            color: var(--primary-dark);
-            margin-bottom: 0.75rem;
-            font-weight: 700;
-        }
-
-        .impact-item p {
-            color: var(--gray-dark);
-            line-height: 1.6;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
-            color: var(--white);
-            padding: 6rem 2rem;
-            text-align: center;
-            border-radius: 20px;
-            margin: 4rem 2rem;
-        }
-
-        .cta-section h2 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-        }
-
-        .cta-section p {
-            font-size: 1.25rem;
-            margin-bottom: 3rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.8;
-        }
-
-        .contact-info {
-            display: flex;
-            gap: 3rem;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .contact-item .icon {
-            font-size: 2rem;
-            color: var(--accent-cyan);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--primary-dark);
-            color: var(--white);
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-
-        footer p {
-            opacity: 0.8;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.25rem;
-            }
-
-            .hero .subtitle {
-                font-size: 1.25rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .section-header h2 {
-                font-size: 2rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .comparison-table {
-                font-size: 0.9rem;
-            }
-
-            .comparison-table th,
-            .comparison-table td {
-                padding: 1rem;
-            }
-
-            .cta-section h2 {
-                font-size: 2rem;
-            }
-        }
-
-        /* Scroll animations */
-        .scroll-reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.6s ease-out;
-        }
-
-        .scroll-reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidrogística — Rehabilitación Sin Zanja</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --navy: #0d2240;
+    --navy-light: #163460;
+    --gold: #f5a623;
+    --gold-light: #ffc84a;
+    --cyan: #00c8e0;
+    --white: #ffffff;
+    --gray: #f4f6fa;
+    --text: #1a2a3a;
+    --muted: #6b7a8d;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background:#fff; color:var(--text); overflow-x:hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:1000;
+    background: rgba(13,34,64,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(245,166,35,0.2);
+    padding: 0 40px;
+    height: 68px;
+    display: flex; align-items:center; justify-content:space-between;
+  }
+  .nav-logo { display:flex; align-items:center; gap:12px; }
+  .logo-svg { height:42px; }
+  .nav-links { display:flex; gap:32px; align-items:center; }
+  .nav-links a {
+    color: rgba(255,255,255,0.75); text-decoration:none;
+    font-size:13px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--navy) !important;
+    padding: 8px 20px; border-radius:6px;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; color: var(--navy) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #060f1e 0%, #0d2240 50%, #0a3060 100%);
+    display: flex; align-items:center;
+    padding: 100px 80px 60px;
+    position: relative; overflow:hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0; bottom:0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(245,166,35,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(0,200,224,0.06) 0%, transparent 50%);
+  }
+  .hero-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center;
+    max-width:1300px; margin:0 auto; position:relative; z-index:1; width:100%;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background: rgba(245,166,35,0.12); border:1px solid rgba(245,166,35,0.3);
+    color: var(--gold); padding:6px 16px; border-radius:100px;
+    font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+    margin-bottom:24px;
+  }
+  .hero h1 {
+    font-size:clamp(36px,4vw,58px); font-weight:800; color:#fff;
+    line-height:1.1; margin-bottom:20px;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub {
+    font-size:18px; color:rgba(255,255,255,0.65); line-height:1.7;
+    margin-bottom:40px; max-width:520px;
+  }
+  .hero-btns { display:flex; gap:16px; flex-wrap:wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--navy);
+    padding:14px 32px; border-radius:8px; font-weight:700; font-size:15px;
+    text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    transition: all 0.2s; border:none; cursor:pointer;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,166,35,0.3); }
+  .btn-outline {
+    background: transparent; color:#fff;
+    padding:14px 32px; border-radius:8px; font-weight:600; font-size:15px;
+    text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    border:1px solid rgba(255,255,255,0.25); transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color:rgba(255,255,255,0.6); background:rgba(255,255,255,0.05); }
+
+  /* Hero right panel */
+  .hero-panel {
+    background: rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:20px; padding:36px;
+    backdrop-filter:blur(10px);
+  }
+  .hero-panel-title {
+    font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+    color: var(--gold); margin-bottom:24px;
+  }
+  .kpi-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .kpi-box {
+    background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08);
+    border-radius:12px; padding:20px; text-align:center;
+  }
+  .kpi-num { font-size:32px; font-weight:800; color:#fff; line-height:1; }
+  .kpi-num span { color: var(--gold); }
+  .kpi-label { font-size:11px; color:rgba(255,255,255,0.5); margin-top:6px; text-transform:uppercase; letter-spacing:0.5px; }
+  .kpi-box.accent { border-color:rgba(245,166,35,0.3); background:rgba(245,166,35,0.06); }
+
+  /* SECTION BASE */
+  section { padding:100px 80px; }
+  .section-inner { max-width:1300px; margin:0 auto; }
+  .section-tag {
+    display:inline-block; font-size:11px; font-weight:700; letter-spacing:2px;
+    text-transform:uppercase; color: var(--gold); margin-bottom:12px;
+  }
+  .section-title {
+    font-size:clamp(28px,3vw,44px); font-weight:800; color:var(--navy);
+    line-height:1.15; margin-bottom:16px;
+  }
+  .section-sub { font-size:17px; color:var(--muted); line-height:1.7; max-width:640px; }
+
+  /* QUIÉNES SOMOS */
+  .about-section { background: var(--gray); }
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; margin-top:60px; }
+  .about-text p { font-size:16px; color:#3a4a5a; line-height:1.8; margin-bottom:20px; }
+  .about-pillars { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:32px; }
+  .pillar {
+    background:#fff; border-radius:12px; padding:20px;
+    border-left:3px solid var(--gold);
+    box-shadow:0 2px 12px rgba(0,0,0,0.05);
+  }
+  .pillar-icon { font-size:22px; color:var(--gold); margin-bottom:8px; }
+  .pillar h4 { font-size:14px; font-weight:700; color:var(--navy); margin-bottom:4px; }
+  .pillar p { font-size:13px; color:var(--muted); }
+  .about-stats { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .stat-card {
+    background: var(--navy); border-radius:16px; padding:28px;
+    text-align:center; position:relative; overflow:hidden;
+  }
+  .stat-card::before {
+    content:''; position:absolute; top:-20px; right:-20px;
+    width:80px; height:80px; border-radius:50%;
+    background:rgba(245,166,35,0.1);
+  }
+  .stat-num { font-size:36px; font-weight:800; color:var(--gold); }
+  .stat-label { font-size:12px; color:rgba(255,255,255,0.6); margin-top:6px; text-transform:uppercase; letter-spacing:0.5px; }
+
+  /* PROBLEMA */
+  .problem-section { background: #fff; }
+  .problem-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; margin-top:60px; }
+  .problem-cards { display:flex; flex-direction:column; gap:16px; }
+  .problem-card {
+    display:flex; gap:20px; align-items:flex-start;
+    background: #fff; border:1px solid #e8edf5; border-radius:14px; padding:24px;
+    box-shadow:0 2px 16px rgba(0,0,0,0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .problem-card:hover { transform:translateX(6px); box-shadow:0 4px 24px rgba(0,0,0,0.08); }
+  .problem-icon {
+    width:48px; height:48px; border-radius:12px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:20px;
+  }
+  .problem-icon.red { background:#fff0f0; color:#e53e3e; }
+  .problem-icon.orange { background:#fff7ed; color:#dd6b20; }
+  .problem-icon.yellow { background:#fffbeb; color:#d69e2e; }
+  .problem-icon.blue { background:#ebf8ff; color:#3182ce; }
+  .problem-card h4 { font-size:15px; font-weight:700; color:var(--navy); margin-bottom:4px; }
+  .problem-card p { font-size:13px; color:var(--muted); line-height:1.6; }
+  .chart-box {
+    background: var(--gray); border-radius:20px; padding:32px;
+    border:1px solid #e8edf5;
+  }
+  .chart-box h4 { font-size:14px; font-weight:700; color:var(--navy); margin-bottom:20px; }
+
+  /* SOLUCIÓN */
+  .solution-section { background: linear-gradient(135deg, var(--navy) 0%, #163460 100%); }
+  .solution-section .section-title { color:#fff; }
+  .solution-section .section-sub { color:rgba(255,255,255,0.6); }
+  .solution-section .section-tag { color:var(--gold); }
+  .solution-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:60px; }
+  .sol-card {
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+    border-radius:16px; padding:32px; transition: all 0.3s;
+  }
+  .sol-card:hover { background:rgba(255,255,255,0.09); transform:translateY(-6px); border-color:rgba(245,166,35,0.3); }
+  .sol-icon { font-size:28px; color:var(--gold); margin-bottom:16px; }
+  .sol-card h3 { font-size:18px; font-weight:700; color:#fff; margin-bottom:10px; }
+  .sol-card p { font-size:14px; color:rgba(255,255,255,0.6); line-height:1.7; }
+  .sol-metric { margin-top:20px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1); }
+  .sol-metric span { font-size:28px; font-weight:800; color:var(--gold); }
+  .sol-metric small { font-size:12px; color:rgba(255,255,255,0.5); display:block; }
+
+  /* TECNOLOGÍAS */
+  .tech-section { background: var(--gray); }
+  .tech-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:28px; margin-top:60px; }
+  .tech-card {
+    background:#fff; border-radius:20px; padding:36px;
+    border:1px solid #e8edf5; box-shadow:0 4px 24px rgba(0,0,0,0.05);
+    transition: all 0.3s; position:relative; overflow:hidden;
+  }
+  .tech-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:4px;
+    background: linear-gradient(90deg, var(--navy), var(--gold));
+  }
+  .tech-card:hover { transform:translateY(-8px); box-shadow:0 16px 48px rgba(0,0,0,0.1); }
+  .tech-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+  .tech-badge {
+    width:56px; height:56px; border-radius:14px;
+    display:flex; align-items:center; justify-content:center; font-size:24px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    color: var(--gold);
+  }
+  .tech-name { font-size:22px; font-weight:800; color:var(--navy); }
+  .tech-tagline { font-size:13px; color:var(--muted); }
+  .tech-desc { font-size:14px; color:#4a5568; line-height:1.7; margin-bottom:20px; }
+  .tech-specs { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .spec-item { background:var(--gray); border-radius:10px; padding:12px 16px; }
+  .spec-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); }
+  .spec-val { font-size:13px; font-weight:600; color:var(--navy); margin-top:2px; }
+
+  /* COMPARACIÓN */
+  .compare-section { background:#fff; }
+  .compare-table-wrap { margin-top:60px; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; }
+  thead tr { background: var(--navy); }
+  thead th { padding:18px 24px; text-align:left; font-size:13px; font-weight:700; color:#fff; letter-spacing:0.5px; }
+  thead th:first-child { border-radius:12px 0 0 0; }
+  thead th:last-child { border-radius:0 12px 0 0; }
+  tbody tr { border-bottom:1px solid #f0f4f8; transition:background 0.15s; }
+  tbody tr:hover { background:#f8faff; }
+  tbody td { padding:16px 24px; font-size:14px; color:var(--text); }
+  tbody td:first-child { font-weight:700; color:var(--navy); }
+  .badge-red { background:#fff0f0; color:#c53030; padding:4px 12px; border-radius:100px; font-size:12px; font-weight:600; }
+  .badge-yellow { background:#fffbeb; color:#b7791f; padding:4px 12px; border-radius:100px; font-size:12px; font-weight:600; }
+  .badge-green { background:#f0fff4; color:#276749; padding:4px 12px; border-radius:100px; font-size:12px; font-weight:600; }
+  .badge-gold { background:rgba(245,166,35,0.12); color:#92600a; padding:4px 12px; border-radius:100px; font-size:12px; font-weight:600; }
+
+  /* CALCULADORA */
+  .calc-section { background: linear-gradient(135deg, #060f1e 0%, var(--navy) 100%); }
+  .calc-section .section-title { color:#fff; }
+  .calc-section .section-sub { color:rgba(255,255,255,0.6); }
+  .calc-section .section-tag { color:var(--gold); }
+  .calc-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; margin-top:60px; align-items:start; }
+  .calc-form { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:36px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-group { margin-bottom:20px; }
+  .form-group label { display:block; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:rgba(255,255,255,0.5); margin-bottom:8px; }
+  .form-group input, .form-group select {
+    width:100%; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15);
+    border-radius:10px; padding:12px 16px; color:#fff; font-size:14px; outline:none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus { border-color:var(--gold); }
+  .form-group select option { background:#0d2240; }
+  .calc-results { display:flex; flex-direction:column; gap:16px; }
+  .result-card {
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+    border-radius:16px; padding:24px; display:flex; align-items:center; gap:20px;
+  }
+  .result-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+  .result-icon.gold { background:rgba(245,166,35,0.15); color:var(--gold); }
+  .result-icon.green { background:rgba(72,187,120,0.15); color:#68d391; }
+  .result-icon.cyan { background:rgba(0,200,224,0.15); color:var(--cyan); }
+  .result-icon.purple { background:rgba(159,122,234,0.15); color:#b794f4; }
+  .result-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:rgba(255,255,255,0.4); }
+  .result-val { font-size:28px; font-weight:800; color:#fff; margin-top:2px; }
+  .result-val span { color:var(--gold); }
+
+  /* CASOS */
+  .cases-section { background:var(--gray); }
+  .cases-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:60px; }
+  .case-card {
+    background:#fff; border-radius:16px; padding:28px;
+    border:1px solid #e8edf5; text-align:center;
+    box-shadow:0 2px 16px rgba(0,0,0,0.04);
+    transition: all 0.3s;
+  }
+  .case-card:hover { transform:translateY(-8px); box-shadow:0 16px 40px rgba(0,0,0,0.1); border-color:var(--gold); }
+  .case-icon { font-size:36px; margin-bottom:16px; }
+  .case-card h3 { font-size:15px; font-weight:700; color:var(--navy); margin-bottom:8px; }
+  .case-card p { font-size:13px; color:var(--muted); line-height:1.6; }
+  .case-tag { display:inline-block; margin-top:16px; font-size:11px; font-weight:700; color:var(--gold); background:rgba(245,166,35,0.1); padding:4px 12px; border-radius:100px; }
+
+  /* IMPACTO URBANO */
+  .urban-section { background:#fff; }
+  .urban-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; margin-top:60px; }
+  .urban-items { display:flex; flex-direction:column; gap:20px; }
+  .urban-item { display:flex; gap:20px; align-items:flex-start; }
+  .urban-dot { width:48px; height:48px; border-radius:12px; background:var(--navy); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+  .urban-item h4 { font-size:15px; font-weight:700; color:var(--navy); margin-bottom:4px; }
+  .urban-item p { font-size:13px; color:var(--muted); line-height:1.6; }
+
+  /* CIERRE */
+  .close-section {
+    background: linear-gradient(135deg, #060f1e 0%, var(--navy) 60%, #0a3060 100%);
+    text-align:center; padding:120px 80px;
+    position:relative; overflow:hidden;
+  }
+  .close-section::before {
+    content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:600px; height:600px; border-radius:50%;
+    background:radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 70%);
+  }
+  .close-section .section-tag { color:var(--gold); }
+  .close-section h2 { font-size:clamp(32px,4vw,56px); font-weight:800; color:#fff; margin-bottom:20px; line-height:1.15; }
+  .close-section h2 span { color:var(--gold); }
+  .close-section p { font-size:18px; color:rgba(255,255,255,0.6); max-width:600px; margin:0 auto 48px; line-height:1.7; }
+  .close-pillars { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; max-width:900px; margin:0 auto 60px; }
+  .close-pillar { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:28px; }
+  .close-pillar i { font-size:28px; color:var(--gold); margin-bottom:12px; }
+  .close-pillar h4 { font-size:15px; font-weight:700; color:#fff; margin-bottom:6px; }
+  .close-pillar p { font-size:13px; color:rgba(255,255,255,0.5); line-height:1.6; }
+  .contact-row { display:flex; justify-content:center; gap:40px; flex-wrap:wrap; }
+  .contact-item { display:flex; align-items:center; gap:12px; }
+  .contact-item i { color:var(--gold); font-size:18px; }
+  .contact-item a { color:rgba(255,255,255,0.8); text-decoration:none; font-size:15px; font-weight:500; }
+  .contact-item a:hover { color:var(--gold); }
+
+  /* FOOTER */
+  footer { background:#060f1e; padding:32px 80px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.06); }
+  footer p { font-size:13px; color:rgba(255,255,255,0.3); }
+
+  /* SCROLL ANIMATIONS */
+  .fade-up { opacity:0; transform:translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity:1; transform:translateY(0); }
+
+  @media(max-width:900px) {
+    section { padding:60px 24px; }
+    .hero { padding:100px 24px 60px; }
+    .hero-grid, .about-grid, .problem-grid, .calc-grid, .urban-grid { grid-template-columns:1fr; gap:40px; }
+    .solution-grid, .tech-grid { grid-template-columns:1fr; }
+    .cases-grid { grid-template-columns:1fr 1fr; }
+    .close-pillars { grid-template-columns:1fr; }
+    nav { padding:0 20px; }
+    .nav-links { display:none; }
+    footer { flex-direction:column; gap:12px; text-align:center; }
+  }
+</style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <nav>
-            <div class="logo">Hidro<span>gística</span></div>
-            <ul class="nav-links">
-                <li><a href="#problema">El Problema</a></li>
-                <li><a href="#soluciones">Soluciones</a></li>
-                <li><a href="#calculadora">Calculadora</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content fade-in">
-            <div class="subtitle">Líder en Rehabilitación de Infraestructura Hídrica</div>
-            <h1>Transformamos Redes Envejecidas en Activos Modernos</h1>
-            <p>Tecnologías avanzadas de rehabilitación sin zanja que eliminan excavaciones masivas, reducen costos hasta un 60% y restauran infraestructura crítica en días, no en semanas.</p>
-            <div class="cta-group">
-                <a href="#calculadora" class="btn btn-primary">Calcular Ahorros</a>
-                <a href="#soluciones" class="btn btn-secondary">Ver Tecnologías</a>
-            </div>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <!-- Logo SVG inline basado en el logo real de Hidrogística -->
+    <svg class="logo-svg" viewBox="0 0 220 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <text x="0" y="22" font-family="'Segoe UI',sans-serif" font-weight="300" font-size="20" fill="#ffffff" letter-spacing="1">HIDR</text>
+      <g transform="translate(82,4)">
+        <path d="M0 8 L10 14 L0 20 Z" fill="#f5a623"/>
+        <path d="M18 0 A14 14 0 0 1 18 28 L18 22 A8 8 0 0 0 8 14 A8 8 0 0 0 18 6 Z" fill="#f5a623"/>
+      </g>
+      <text x="0" y="44" font-family="'Segoe UI',sans-serif" font-weight="800" font-size="20" fill="#ffffff" letter-spacing="2">GÍSTICA</text>
+    </svg>
+  </div>
+  <div class="nav-links">
+    <a href="#quienes">Quiénes Somos</a>
+    <a href="#problema">El Problema</a>
+    <a href="#tecnologias">Tecnologías</a>
+    <a href="#comparacion">Comparación</a>
+    <a href="#calculadora">Calculadora</a>
+    <a href="#contacto" class="nav-cta">Contacto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-badge"><i class="fas fa-map-marker-alt"></i> Líderes en Chile · Grupo Aguas</div>
+      <h1>Rehabilitamos<br>tuberías <span>sin excavar.</span><br>Sin interrumpir.</h1>
+      <p class="hero-sub">
+        Tecnología de rehabilitación sin zanja para infraestructura hídrica crítica. 
+        Más de 22 años transformando la gestión del agua en Chile.
+      </p>
+      <div class="hero-btns">
+        <a href="#tecnologias" class="btn-primary">Ver Tecnologías <i class="fas fa-arrow-right"></i></a>
+        <a href="#calculadora" class="btn-outline"><i class="fas fa-calculator"></i> Calcular Ahorro</a>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <div class="hero-panel-title"><i class="fas fa-chart-bar" style="margin-right:6px"></i>Impacto Comprobado</div>
+      <div class="kpi-grid">
+        <div class="kpi-box accent">
+          <div class="kpi-num">+<span>100</span></div>
+          <div class="kpi-label">km rehabilitados</div>
         </div>
-    </section>
-
-    <!-- Problem Section -->
-    <section id="problema">
-        <div class="section-header scroll-reveal">
-            <div class="tagline">El Desafío Hídrico</div>
-            <h2>La Crisis Silenciosa de la Infraestructura</h2>
-            <p>Las redes de distribución hídrica en América Latina enfrentan un deterioro crítico que amenaza la seguridad del suministro y genera pérdidas económicas masivas.</p>
+        <div class="kpi-box">
+          <div class="kpi-num"><span>22</span></div>
+          <div class="kpi-label">años en el mercado</div>
         </div>
-        <div class="problem-grid">
-            <div class="problem-card scroll-reveal">
-                <span class="icon">⏳</span>
-                <h3>Infraestructura Envejecida</h3>
-                <span class="stat">35%+</span>
-                <p>Más del 35% de las redes en América Latina superan los 30 años de antigüedad, con deterioro estructural avanzado y alto riesgo de falla.</p>
-            </div>
-            <div class="problem-card scroll-reveal">
-                <span class="icon">💧</span>
-                <h3>Pérdidas Masivas</h3>
-                <span class="stat">40%</span>
-                <p>En promedio, 40% del agua potable se pierde antes de llegar al usuario final. En Chile, Santiago pierde 30% por fugas en redes obsoletas.</p>
-            </div>
-            <div class="problem-card scroll-reveal">
-                <span class="icon">💰</span>
-                <h3>Costos Indirectos</h3>
-                <span class="stat">4x</span>
-                <p>La excavación tradicional genera costos indirectos hasta 4 veces mayores: restauración de pavimento, congestión, interrupción comercial y daño reputacional.</p>
-            </div>
-            <div class="problem-card scroll-reveal">
-                <span class="icon">🚧</span>
-                <h3>Impacto Urbano</h3>
-                <span class="stat">Semanas</span>
-                <p>Las obras tradicionales toman semanas o meses, generando ruido, polvo, cortes de tránsito y molestias masivas a vecinos y comercios.</p>
-            </div>
+        <div class="kpi-box">
+          <div class="kpi-num">+<span>300</span></div>
+          <div class="kpi-label">clientes activos</div>
         </div>
-    </section>
-
-    <!-- Solutions Section -->
-    <section id="soluciones">
-        <div class="section-header scroll-reveal">
-            <div class="tagline">Tecnologías Sin Zanja</div>
-            <h2>Nuestras Soluciones Especializadas</h2>
-            <p>Cuatro tecnologías avanzadas que eliminan la necesidad de excavación masiva y restauran infraestructura crítica con mínima interrupción.</p>
+        <div class="kpi-box accent">
+          <div class="kpi-num"><span>98</span>%</div>
+          <div class="kpi-label">efectividad detección</div>
         </div>
-        <div class="tech-grid">
-            <div class="tech-card scroll-reveal">
-                <div class="tech-name">CURAPIPE</div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Problema que Resuelve</div>
-                    <div class="tech-detail-content">Tuberías fisuradas, con fugas persistentes y deterioro estructural en redes de agua potable y alcantarillado.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Aplicación Principal</div>
-                    <div class="tech-detail-content">Revestimiento interno con resinas curables que crean una tubería estructuralmente independiente dentro de la existente.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Beneficio Técnico</div>
-                    <div class="tech-detail-content">Recupera integridad estructural sin reducir diámetro hidráulico. Vida útil de 50+ años, resistente a corrosión química.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Beneficio Operacional</div>
-                    <div class="tech-detail-content">Instalación en horas, sin interrupción prolongada. Aplicable en diámetros de 50mm a 600mm, bajo edificios y vías principales.</div>
-                </div>
-            </div>
+      </div>
+      <div style="margin-top:20px; padding:16px; background:rgba(245,166,35,0.08); border:1px solid rgba(245,166,35,0.2); border-radius:12px;">
+        <div style="font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Posición</div>
+        <div style="font-size:14px; color:#fff; font-weight:600;">Únicos en LATAM en detección de fugas con perros adiestrados</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <div class="tech-card scroll-reveal">
-                <div class="tech-name">IMPREG GL16</div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Problema que Resuelve</div>
-                    <div class="tech-detail-content">Infiltración de aguas subterráneas y exfiltración de aguas residuales en redes de alcantarillado con fisuras y uniones defectuosas.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Aplicación Principal</div>
-                    <div class="tech-detail-content">Impregnación con manga textil y resinas estructurales para sellar infiltraciones y restaurar hermeticidad.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Beneficio Técnico</div>
-                    <div class="tech-detail-content">Alta resistencia mecánica, flexibilidad para adaptarse a geometrías irregulares, y total impermeabilización.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Beneficio Operacional</div>
-                    <div class="tech-detail-content">Reduce contaminación de napas freáticas y elimina sobrecostos de tratamiento por agua infiltrada. Ejecución rápida en redes urbanas complejas.</div>
-                </div>
-            </div>
-
-            <div class="tech-card scroll-reveal">
-                <div class="tech-name">ASOE</div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Problema que Resuelve</div>
-                    <div class="tech-detail-content">Renovación de tuberías colapsadas o con obstrucciones severas que requieren reemplazo sin excavar calles o espacios urbanos.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Aplicación Principal</div>
-                    <div class="tech-detail-content">Tecnología de pipe bursting que fragmenta la tubería vieja e instala simultáneamente una nueva de HDPE de mayor diámetro.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Beneficio Técnico</div>
-                    <div class="tech-detail-content">Permite upgrade de capacidad hidráulica (mayor diámetro) con cero excavación longitudinal. Material HDPE con vida útil superior a 100 años.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Beneficio Operacional</div>
-                    <div class="tech-detail-content">Instalación de +200 metros lineales por día. Cero rotura de pavimentos, ideal para zonas de alto tráfico o patrimonio urbano.</div>
-                </div>
-            </div>
-
-            <div class="tech-card scroll-reveal">
-                <div class="tech-name">NUFLOW</div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Problema que Resuelve</div>
-                    <div class="tech-detail-content">Corrosión interna, incrustaciones y deterioro en tuberías de edificios, instalaciones industriales y redes domiciliarias.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Aplicación Principal</div>
-                    <div class="tech-detail-content">Revestimiento interno epóxico aplicado por inyección que forma capa protectora continua, sellando microporosidades.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Beneficio Técnico</div>
-                    <div class="tech-detail-content">Mejora calidad del agua al eliminar óxidos y metales pesados. Apto para agua potable certificada, sin toxicidad.</div>
-                </div>
-                <div class="tech-detail">
-                    <div class="tech-detail-label">Beneficio Operacional</div>
-                    <div class="tech-detail-content">Aplicable en tuberías de difícil acceso (muros, losas). Ejecución sin demoliciones ni reemplazo total, con retorno inmediato al servicio.</div>
-                </div>
-            </div>
+<!-- QUIÉNES SOMOS -->
+<section class="about-section" id="quienes">
+  <div class="section-inner">
+    <div class="fade-up">
+      <span class="section-tag">¿Quiénes somos?</span>
+      <h2 class="section-title">Hacemos que los<br>proyectos fluyan.</h2>
+      <p class="section-sub">Somos un proveedor integral de servicios y materiales para el mercado del agua, parte del Grupo Aguas, la mayor empresa sanitaria de Chile.</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-text fade-up">
+        <p>En Hidrogística creemos que el agua es el recurso más esencial y valioso de nuestro planeta. Trabajamos con pasión para generar un impacto real en la gestión hídrica, combinando tecnología de punta con más de dos décadas de experiencia comprobada.</p>
+        <p>Somos líderes nacionales en tecnología sin zanja, con capacidad para atender desde redes de agua potable hasta infraestructura industrial, minería y edificios.</p>
+        <div class="about-pillars">
+          <div class="pillar">
+            <div class="pillar-icon"><i class="fas fa-microchip"></i></div>
+            <h4>Innovación Tecnológica</h4>
+            <p>IA, dashboards y robots CCTV de última generación</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon"><i class="fas fa-shield-halved"></i></div>
+            <h4>Respaldo Grupo Aguas</h4>
+            <p>Solidez y liderazgo de la mayor sanitaria de Chile</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon"><i class="fas fa-leaf"></i></div>
+            <h4>Sustentabilidad</h4>
+            <p>Menor impacto ambiental y social en cada proyecto</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon"><i class="fas fa-chart-line"></i></div>
+            <h4>Excelencia Operativa</h4>
+            <p>Estándares 5 Sigma y metodología Lean</p>
+          </div>
         </div>
-    </section>
-
-    <!-- Comparison Section -->
-    <section>
-        <div class="section-header scroll-reveal">
-            <div class="tagline">Análisis Comparativo</div>
-            <h2>Excavación Tradicional vs Sin Zanja</h2>
-            <p>Una comparación técnica y operacional que evidencia la superioridad de la rehabilitación sin zanja.</p>
+      </div>
+      <div class="about-stats fade-up">
+        <div class="stat-card">
+          <div class="stat-num">+22</div>
+          <div class="stat-label">Años en el mercado</div>
         </div>
-        <div class="comparison-container scroll-reveal">
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Métrica</th>
-                        <th>Excavación Tradicional</th>
-                        <th>Rehabilitación Sin Zanja</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="metric">Tiempo de Ejecución (100m)</td>
-                        <td class="traditional">2-4 semanas</td>
-                        <td class="trenchless">1-3 días</td>
-                    </tr>
-                    <tr>
-                        <td class="metric">Interrupción de Servicio</td>
-                        <td class="traditional">Total durante obra</td>
-                        <td class="trenchless">Mínima (horas)</td>
-                    </tr>
-                    <tr>
-                        <td class="metric">Costos Directos e Indirectos</td>
-                        <td class="traditional">100% (Base)</td>
-                        <td class="trenchless">40-70% (Ahorro 30-60%)</td>
-                    </tr>
-                    <tr>
-                        <td class="metric">Impacto Urbano</td>
-                        <td class="traditional">Alto: cortes, ruido, polvo</td>
-                        <td class="trenchless">Mínimo: 1-2 puntos de acceso</td>
-                    </tr>
-                    <tr>
-                        <td class="metric">Restauración Requerida</td>
-                        <td class="traditional">Pavimento, veredas, paisajismo</td>
-                        <td class="trenchless">Mínima o nula</td>
-                    </tr>
-                    <tr>
-                        <td class="metric">Riesgo Operacional</td>
-                        <td class="traditional">Alto: accidentes, daño a servicios</td>
-                        <td class="trenchless">Bajo: proceso controlado</td>
-                    </tr>
-                    <tr>
-                        <td class="metric">Huella de Carbono</td>
-                        <td class="traditional">Alta: maquinaria pesada, transporte</td>
-                        <td class="trenchless">Reducida hasta 70%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric">Retorno a Servicio Pleno</td>
-                        <td class="traditional">Días/semanas post-obra</td>
-                        <td class="trenchless">Inmediato (horas)</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="stat-card">
+          <div class="stat-num">+300</div>
+          <div class="stat-label">Clientes activos</div>
         </div>
-    </section>
-
-    <!-- Calculator Section -->
-    <section id="calculadora">
-        <div class="section-header scroll-reveal">
-            <div class="tagline">Herramienta de Estimación</div>
-            <h2>Calculadora de Impacto</h2>
-            <p>Estime los beneficios operacionales y económicos de la rehabilitación sin zanja para su proyecto.</p>
+        <div class="stat-card">
+          <div class="stat-num">+100km</div>
+          <div class="stat-label">Tuberías rehabilitadas</div>
         </div>
-        <div class="calculator scroll-reveal">
-            <h3>Configure su Proyecto</h3>
-            <form class="calculator-form" id="calculatorForm">
-                <div class="form-group">
-                    <label for="meters">Metros Lineales a Rehabilitar</label>
-                    <input type="number" id="meters" name="meters" min="10" max="10000" value="100" required>
-                </div>
-                <div class="form-group">
-                    <label for="technology">Tecnología</label>
-                    <select id="technology" name="technology" required>
-                        <option value="curapipe">CURAPIPE</option>
-                        <option value="impreg">IMPREG GL16</option>
-                        <option value="asoe">ASOE</option>
-                        <option value="nuflow">NUFLOW</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="environment">Tipo de Entorno</label>
-                    <select id="environment" name="environment" required>
-                        <option value="urban">Urbano (alto tráfico)</option>
-                        <option value="industrial">Industrial</option>
-                        <option value="building">Edificio/Domiciliario</option>
-                        <option value="residential">Residencial</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="diameter">Diámetro Aproximado (mm)</label>
-                    <select id="diameter" name="diameter" required>
-                        <option value="small">50-150mm (Pequeño)</option>
-                        <option value="medium">150-300mm (Mediano)</option>
-                        <option value="large">300-600mm (Grande)</option>
-                    </select>
-                </div>
-                <button type="submit" class="calculate-btn">Calcular Beneficios</button>
-            </form>
-            <div id="resultsContainer" style="display: none;">
-                <div class="results-grid">
-                    <div class="result-card">
-                        <span class="result-value" id="timeSaved">--</span>
-                        <span class="result-label">Días Ahorrados</span>
-                    </div>
-                    <div class="result-card">
-                        <span class="result-value" id="costSaving">--</span>
-                        <span class="result-label">Ahorro Económico Estimado</span>
-                    </div>
-                    <div class="result-card">
-                        <span class="result-value" id="co2Reduction">--</span>
-                        <span class="result-label">Reducción CO₂ (kg)</span>
-                    </div>
-                    <div class="result-card">
-                        <span class="result-value" id="disruption">--</span>
-                        <span class="result-label">Reducción Interrupción</span>
-                    </div>
-                </div>
-            </div>
+        <div class="stat-card">
+          <div class="stat-num">+300km</div>
+          <div class="stat-label">Tuberías inspeccionadas</div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Use Cases Section -->
-    <section>
-        <div class="section-header scroll-reveal">
-            <div class="tagline">Aplicaciones</div>
-            <h2>Casos de Aplicación Estratégica</h2>
-            <p>Soluciones adaptadas a cada contexto operacional y tipo de infraestructura.</p>
+<!-- EL PROBLEMA -->
+<section class="problem-section" id="problema">
+  <div class="section-inner">
+    <div class="fade-up">
+      <span class="section-tag">El Problema</span>
+      <h2 class="section-title">La infraestructura hídrica<br>está envejeciendo.</h2>
+      <p class="section-sub">Más del 30% de las redes de agua potable en LATAM superan los 30 años de operación. Excavar en ciudades modernas ya no es viable.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-cards fade-up">
+        <div class="problem-card">
+          <div class="problem-icon red"><i class="fas fa-triangle-exclamation"></i></div>
+          <div>
+            <h4>Redes envejecidas en LATAM</h4>
+            <p>+30% de las redes de agua potable superan los 30 años. En Chile, muchas redes urbanas tienen más de 40 años sin rehabilitación.</p>
+          </div>
         </div>
-        <div class="use-cases-grid">
-            <div class="use-case-card scroll-reveal">
-                <h4>🏙️ Redes Urbanas de Agua Potable</h4>
-                <ul>
-                    <li>Rehabilitación de matrices principales sin cortar suministro</li>
-                    <li>Eliminación de fugas en zonas de alto tráfico</li>
-                    <li>Cero impacto en comercios y transporte público</li>
-                    <li>Cumplimiento de normativas sin excavación masiva</li>
-                </ul>
-            </div>
-            <div class="use-case-card scroll-reveal">
-                <h4>🚰 Colectores de Alcantarillado</h4>
-                <ul>
-                    <li>Sellado de infiltraciones y exfiltraciones</li>
-                    <li>Prevención de colapsos en redes antiguas</li>
-                    <li>Reducción de agua no controlada en plantas de tratamiento</li>
-                    <li>Protección de napas freáticas</li>
-                </ul>
-            </div>
-            <div class="use-case-card scroll-reveal">
-                <h4>🏭 Plantas e Instalaciones Industriales</h4>
-                <ul>
-                    <li>Continuidad operacional sin detención de procesos</li>
-                    <li>Rehabilitación de redes en espacios confinados</li>
-                    <li>Cumplimiento ambiental y seguridad hídrica</li>
-                    <li>Upgrade de capacidad sin expansión física</li>
-                </ul>
-            </div>
-            <div class="use-case-card scroll-reveal">
-                <h4>🏢 Edificios y Redes Domiciliarias</h4>
-                <ul>
-                    <li>Solución sin demoler muros ni pisos</li>
-                    <li>Mejora de calidad de agua potable</li>
-                    <li>Eliminación de corrosión y contaminación</li>
-                    <li>Valor agregado a la propiedad</li>
-                </ul>
-            </div>
+        <div class="problem-card">
+          <div class="problem-icon orange"><i class="fas fa-droplet-slash"></i></div>
+          <div>
+            <h4>Pérdidas de agua críticas</h4>
+            <p>Las fugas en redes deterioradas generan pérdidas de hasta un 35% del agua producida, agravando la escasez hídrica.</p>
+          </div>
         </div>
-    </section>
-
-    <!-- Impact Section -->
-    <section>
-        <div class="section-header scroll-reveal">
-            <div class="tagline">Ventaja Estratégica</div>
-            <h2>Por Qué Sin Zanja Es Superior</h2>
-            <p>Beneficios tangibles que van más allá de lo técnico y transforman la gestión de infraestructura.</p>
+        <div class="problem-card">
+          <div class="problem-icon yellow"><i class="fas fa-road"></i></div>
+          <div>
+            <h4>Excavación: cara y disruptiva</h4>
+            <p>Reparar con zanja en zonas urbanas cuesta 3-5x más por costos indirectos: pavimentación, desvíos, multas y pérdida de servicio.</p>
+          </div>
         </div>
-        <div class="impact-grid">
-            <div class="impact-item scroll-reveal">
-                <span class="impact-icon">🚦</span>
-                <h4>Cero Congestión</h4>
-                <p>Sin cortes de calles ni desvíos. Mantiene flujo vehicular y actividad económica sin interrupciones.</p>
-            </div>
-            <div class="impact-item scroll-reveal">
-                <span class="impact-icon">🛣️</span>
-                <h4>Pavimentos Intactos</h4>
-                <p>No requiere rotura ni reconstrucción de asfalto, veredas o áreas verdes. Ahorro masivo en restauración.</p>
-            </div>
-            <div class="impact-item scroll-reveal">
-                <span class="impact-icon">👥</span>
-                <h4>Vecinos Satisfechos</h4>
-                <p>Mínimas molestias, sin ruido, polvo ni semanas de obras. Mejor imagen corporativa y social.</p>
-            </div>
-            <div class="impact-item scroll-reveal">
-                <span class="impact-icon">⚡</span>
-                <h4>Plazos Express</h4>
-                <p>Ejecución 5-10 veces más rápida que obra tradicional. Cumplimiento de compromisos críticos.</p>
-            </div>
-            <div class="impact-item scroll-reveal">
-                <span class="impact-icon">🎯</span>
-                <h4>Reputación Protegida</h4>
-                <p>Evita crisis de imagen por obras invasivas. Demuestra compromiso con tecnología y sostenibilidad.</p>
-            </div>
-            <div class="impact-item scroll-reveal">
-                <span class="impact-icon">🔄</span>
-                <h4>Continuidad Operacional</h4>
-                <p>Servicio interrumpido solo por horas, no días. Clave para hospitales, industrias y servicios críticos.</p>
-            </div>
+        <div class="problem-card">
+          <div class="problem-icon blue"><i class="fas fa-city"></i></div>
+          <div>
+            <h4>Impacto urbano severo</h4>
+            <p>Obras tradicionales generan congestión, ruido, polvo y emisiones que afectan a miles de personas durante semanas o meses.</p>
+          </div>
         </div>
-    </section>
+      </div>
+      <div class="chart-box fade-up">
+        <h4>Pérdidas de agua por fugas en redes urbanas (%)</h4>
+        <canvas id="lossChart" height="260"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- CTA Section -->
-    <section class="cta-section" id="contacto">
-        <h2>Transforme su Infraestructura Hídrica</h2>
-        <p>Somos el socio tecnológico especializado en rehabilitación sin zanja que su organización necesita. Experiencia técnica, tecnologías certificadas y compromiso con resultados medibles.</p>
-        <div class="cta-group">
-            <a href="mailto:sfuenzalida@hidrogistica.cl" class="btn btn-primary">Solicitar Diagnóstico</a>
-            <a href="mailto:sfuenzalida@hidrogistica.cl" class="btn btn-secondary">Agendar Reunión Técnica</a>
+<!-- LA SOLUCIÓN -->
+<section class="solution-section" id="solucion">
+  <div class="section-inner">
+    <div class="fade-up">
+      <span class="section-tag">La Solución</span>
+      <h2 class="section-title">Rehabilitación Sin Zanja:<br>la respuesta correcta.</h2>
+      <p class="section-sub">Tecnología que repara desde adentro. Sin excavar. Sin interrumpir. Con resultados superiores a la obra tradicional.</p>
+    </div>
+    <div class="solution-grid">
+      <div class="sol-card fade-up">
+        <div class="sol-icon"><i class="fas fa-clock"></i></div>
+        <h3>Menor Tiempo</h3>
+        <p>Proyectos que tomaban 20-30 días se ejecutan en 1-5 días. Retorno a operación normal en horas.</p>
+        <div class="sol-metric"><span>-80%</span><small>reducción en tiempo de ejecución</small></div>
+      </div>
+      <div class="sol-card fade-up">
+        <div class="sol-icon"><i class="fas fa-coins"></i></div>
+        <h3>Menor Costo Total</h3>
+        <p>Eliminamos costos de pavimentación, desvíos de tránsito, multas y restauración de superficie.</p>
+        <div class="sol-metric"><span>-60%</span><small>en costo total del proyecto</small></div>
+      </div>
+      <div class="sol-card fade-up">
+        <div class="sol-icon"><i class="fas fa-city"></i></div>
+        <h3>Cero Impacto Urbano</h3>
+        <p>Sin cortes de pavimento, sin desvíos de tránsito, sin ruido ni polvo. La ciudad sigue funcionando.</p>
+        <div class="sol-metric"><span>0</span><small>excavaciones necesarias</small></div>
+      </div>
+      <div class="sol-card fade-up">
+        <div class="sol-icon"><i class="fas fa-infinity"></i></div>
+        <h3>Mayor Vida Útil</h3>
+        <p>Las mangas y revestimientos instalados garantizan 50 años de vida útil, superando la tubería original.</p>
+        <div class="sol-metric"><span>50</span><small>años de vida útil garantizada</small></div>
+      </div>
+      <div class="sol-card fade-up">
+        <div class="sol-icon"><i class="fas fa-water"></i></div>
+        <h3>Continuidad de Servicio</h3>
+        <p>Trabajamos con la red en operación. Sin corte de suministro al cliente final en la mayoría de los casos.</p>
+        <div class="sol-metric"><span>24/7</span><small>continuidad operacional</small></div>
+      </div>
+      <div class="sol-card fade-up">
+        <div class="sol-icon"><i class="fas fa-leaf"></i></div>
+        <h3>Menor Huella de CO₂</h3>
+        <p>Sin maquinaria pesada de excavación ni transporte de escombros. Impacto ambiental mínimo.</p>
+        <div class="sol-metric"><span>-70%</span><small>reducción de emisiones CO₂</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECNOLOGÍAS -->
+<section class="tech-section" id="tecnologias">
+  <div class="section-inner">
+    <div class="fade-up">
+      <span class="section-tag">Nuestras Tecnologías</span>
+      <h2 class="section-title">Soluciones premium<br>para cada desafío.</h2>
+      <p class="section-sub">Cuatro tecnologías de clase mundial, seleccionadas y adaptadas para la realidad técnica y geográfica de Chile.</p>
+    </div>
+    <div class="tech-grid">
+      <!-- Curapipe -->
+      <div class="tech-card fade-up">
+        <div class="tech-header">
+          <div class="tech-badge"><i class="fas fa-droplet"></i></div>
+          <div>
+            <div class="tech-name">Curapipe</div>
+            <div class="tech-tagline">Tecnología TALR — Reparación de fugas en carga</div>
+          </div>
         </div>
-        <div class="contact-info">
-            <div class="contact-item">
-                <span class="icon">📧</span>
-                <span>sfuenzalida@hidrogistica.cl</span>
-            </div>
-            <div class="contact-item">
-                <span class="icon">🇨🇱</span>
-                <span>Chile | América Latina</span>
-            </div>
+        <p class="tech-desc">Sistema de reparación de fugas desde el interior de la tubería, sin cortar el suministro. Repara múltiples puntos simultáneamente mediante un robot que inyecta sellante de alta resistencia en cada fuga detectada.</p>
+        <div class="tech-specs">
+          <div class="spec-item">
+            <div class="spec-label">Problema que resuelve</div>
+            <div class="spec-val">Fugas activas en redes AP</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Dónde aplica</div>
+            <div class="spec-val">Redes urbanas de agua potable</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Ventaja clave</div>
+            <div class="spec-val">Sin corte de suministro</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Diámetro típico</div>
+            <div class="spec-val">DN 50 – DN 300 mm</div>
+          </div>
         </div>
-    </section>
+      </div>
+      <!-- Impreg GL16 -->
+      <div class="tech-card fade-up">
+        <div class="tech-header">
+          <div class="tech-badge"><i class="fas fa-shield-halved"></i></div>
+          <div>
+            <div class="tech-name">Impreg GL16</div>
+            <div class="tech-tagline">Manga UV de fibra de vidrio — Rehabilitación estructural</div>
+          </div>
+        </div>
+        <p class="tech-desc">Manga de fibra de vidrio curada con luz ultravioleta. Ofrece máxima resistencia estructural con mínimo espesor. Ideal para colectores y tuberías con deterioro estructural severo que requieren una nueva tubería dentro de la existente.</p>
+        <div class="tech-specs">
+          <div class="spec-item">
+            <div class="spec-label">Problema que resuelve</div>
+            <div class="spec-val">Deterioro estructural severo</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Dónde aplica</div>
+            <div class="spec-val">Colectores y redes de alcantarillado</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Ventaja clave</div>
+            <div class="spec-val">50 años de vida útil</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Diámetro típico</div>
+            <div class="spec-val">DN 150 – DN 1200 mm</div>
+          </div>
+        </div>
+      </div>
+      <!-- ASOE -->
+      <div class="tech-card fade-up">
+        <div class="tech-header">
+          <div class="tech-badge"><i class="fas fa-pipe-valve"></i></div>
+          <div>
+            <div class="tech-name">ASOE</div>
+            <div class="tech-tagline">Manga flexible multicapa con Kevlar® — Alta presión</div>
+          </div>
+        </div>
+        <p class="tech-desc">Manga flexible multicapa reforzada con Kevlar®, diseñada para rehabilitación de tuberías de presión y gravedad de gran diámetro. Alta resistencia mecánica, química y sísmica. Instalación en tramos largos sin puntos de unión.</p>
+        <div class="tech-specs">
+          <div class="spec-item">
+            <div class="spec-label">Problema que resuelve</div>
+            <div class="spec-val">Tuberías de presión deterioradas</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Dónde aplica</div>
+            <div class="spec-val">Redes de alta presión e industriales</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Ventaja clave</div>
+            <div class="spec-val">Resistencia sísmica + Kevlar®</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Diámetro típico</div>
+            <div class="spec-val">DN 200 – DN 2000 mm</div>
+          </div>
+        </div>
+      </div>
+      <!-- Nuflow -->
+      <div class="tech-card fade-up">
+        <div class="tech-header">
+          <div class="tech-badge"><i class="fas fa-building"></i></div>
+          <div>
+            <div class="tech-name">Nuflow</div>
+            <div class="tech-tagline">Revestimiento epóxico — Inside Building</div>
+          </div>
+        </div>
+        <p class="tech-desc">Revestimiento epóxico estructural para diámetros pequeños y conexiones domiciliarias. Ideal para edificios, condominios, hospitales y malls. Rehabilita sin romper pisos, muros ni pavimentos. Certificación NSF/ANSI 61 para agua potable.</p>
+        <div class="tech-specs">
+          <div class="spec-item">
+            <div class="spec-label">Problema que resuelve</div>
+            <div class="spec-val">Redes internas deterioradas</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Dónde aplica</div>
+            <div class="spec-val">Edificios, condominios, hospitales</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Ventaja clave</div>
+            <div class="spec-val">Sin romper muros ni pisos</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Diámetro típico</div>
+            <div class="spec-val">DN 25 – DN 150 mm</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Hidrogística. Especialistas en Rehabilitación de Infraestructura Hídrica Sin Zanja.</p>
-        <p style="margin-top: 1rem; opacity: 0.6;">Tecnologías: CURAPIPE | IMPREG GL16 | ASOE | NUFLOW</p>
-    </footer>
+<!-- COMPARACIÓN -->
+<section class="compare-section" id="comparacion">
+  <div class="section-inner">
+    <div class="fade-up">
+      <span class="section-tag">Análisis Comparativo</span>
+      <h2 class="section-title">Excavación tradicional<br>vs. Tecnología Sin Zanja</h2>
+      <p class="section-sub">Una comparación técnica y objetiva que muestra por qué la rehabilitación sin zanja es la decisión correcta para infraestructura crítica.</p>
+    </div>
+    <div class="compare-table-wrap fade-up">
+      <table>
+        <thead>
+          <tr>
+            <th>Criterio</th>
+            <th>Excavación Tradicional</th>
+            <th>CIPP (Manga UV)</th>
+            <th>Curapipe (TALR)</th>
+            <th>Nuflow (Epóxico)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tiempo de ejecución (100m)</td>
+            <td><span class="badge-red">20–30 días</span></td>
+            <td><span class="badge-yellow">3–5 días</span></td>
+            <td><span class="badge-green">1–2 días</span></td>
+            <td><span class="badge-green">1–3 días</span></td>
+          </tr>
+          <tr>
+            <td>Interrupción de servicio</td>
+            <td><span class="badge-red">Alta (días)</span></td>
+            <td><span class="badge-yellow">Baja (horas)</span></td>
+            <td><span class="badge-green">Casi nula</span></td>
+            <td><span class="badge-green">Mínima</span></td>
+          </tr>
+          <tr>
+            <td>Impacto en tráfico urbano</td>
+            <td><span class="badge-red">Severo</span></td>
+            <td><span class="badge-yellow">Moderado</span></td>
+            <td><span class="badge-green">Nulo</span></td>
+            <td><span class="badge-green">Nulo</span></td>
+          </tr>
+          <tr>
+            <td>Costo indirecto (pavimento, desvíos)</td>
+            <td><span class="badge-red">Alto (3–5x)</span></td>
+            <td><span class="badge-yellow">Medio</span></td>
+            <td><span class="badge-green">Bajo</span></td>
+            <td><span class="badge-green">Bajo</span></td>
+          </tr>
+          <tr>
+            <td>Vida útil resultante</td>
+            <td><span class="badge-yellow">15–25 años</span></td>
+            <td><span class="badge-green">50 años</span></td>
+            <td><span class="badge-green">25–30 años</span></td>
+            <td><span class="badge-green">50 años</span></td>
+          </tr>
+          <tr>
+            <td>Emisiones CO₂</td>
+            <td><span class="badge-red">Alta</span></td>
+            <td><span class="badge-yellow">Baja</span></td>
+            <td><span class="badge-green">Muy baja</span></td>
+            <td><span class="badge-green">Muy baja</span></td>
+          </tr>
+          <tr>
+            <td>Requiere excavación</td>
+            <td><span class="badge-red">Sí (total)</span></td>
+            <td><span class="badge-gold">Mínima (acceso)</span></td>
+            <td><span class="badge-green">No</span></td>
+            <td><span class="badge-green">No</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // Scroll reveal animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+<!-- CALCULADORA -->
+<section class="calc-section" id="calculadora">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center; margin-bottom:0;">
+      <span class="section-tag">Herramienta de Ingeniería</span>
+      <h2 class="section-title" style="color:#fff;">Calculadora de Impacto</h2>
+      <p class="section-sub" style="color:rgba(255,255,255,0.6); margin:0 auto;">Proyecta el ahorro real de usar tecnología Hidrogística en tu próximo proyecto.</p>
+    </div>
+    <div class="calc-grid">
+      <div class="calc-form fade-up">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Metros a rehabilitar</label>
+            <input type="number" id="c-meters" value="200" min="10">
+          </div>
+          <div class="form-group">
+            <label>Diámetro (mm)</label>
+            <select id="c-diam">
+              <option value="small">DN 50–150 (pequeño)</option>
+              <option value="medium" selected>DN 150–400 (medio)</option>
+              <option value="large">DN 400–1200 (grande)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tipo de zona</label>
+            <select id="c-zone">
+              <option value="urban" selected>Urbana (alta densidad)</option>
+              <option value="suburban">Periurbana</option>
+              <option value="rural">Rural / Industrial</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tecnología</label>
+            <select id="c-tech">
+              <option value="curapipe">Curapipe (TALR)</option>
+              <option value="impreg" selected>Impreg GL16 (UV)</option>
+              <option value="asoe">ASOE (Kevlar)</option>
+              <option value="nuflow">Nuflow (Epóxico)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Profundidad estimada</label>
+          <select id="c-depth">
+            <option value="shallow">Superficial (0–1.5m)</option>
+            <option value="medium" selected>Media (1.5–3m)</option>
+            <option value="deep">Profunda (+3m)</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="calculate()" style="width:100%; justify-content:center; margin-top:8px;">
+          <i class="fas fa-calculator"></i> Calcular Ahorro
+        </button>
+      </div>
+      <div class="calc-results fade-up">
+        <div class="result-card">
+          <div class="result-icon gold"><i class="fas fa-clock"></i></div>
+          <div>
+            <div class="result-label">Días ahorrados vs. excavación</div>
+            <div class="result-val" id="r-days"><span>—</span></div>
+          </div>
+        </div>
+        <div class="result-card">
+          <div class="result-icon green"><i class="fas fa-dollar-sign"></i></div>
+          <div>
+            <div class="result-label">Ahorro estimado (USD)</div>
+            <div class="result-val" id="r-money"><span>—</span></div>
+          </div>
+        </div>
+        <div class="result-card">
+          <div class="result-icon cyan"><i class="fas fa-leaf"></i></div>
+          <div>
+            <div class="result-label">CO₂ evitado (toneladas)</div>
+            <div class="result-val" id="r-co2"><span>—</span></div>
+          </div>
+        </div>
+        <div class="result-card">
+          <div class="result-icon purple"><i class="fas fa-gauge-high"></i></div>
+          <div>
+            <div class="result-label">Mejora operativa estimada</div>
+            <div class="result-val" id="r-ops"><span>—</span></div>
+          </div>
+        </div>
+        <div style="background:rgba(245,166,35,0.08); border:1px solid rgba(245,166,35,0.2); border-radius:12px; padding:16px; font-size:12px; color:rgba(255,255,255,0.4); line-height:1.6;">
+          * Estimaciones basadas en proyectos reales en Chile. Los valores finales dependen de condiciones específicas del proyecto.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
+<!-- CASOS DE APLICACIÓN -->
+<section class="cases-section" id="casos">
+  <div class="section-inner">
+    <div class="fade-up">
+      <span class="section-tag">Casos de Aplicación</span>
+      <h2 class="section-title">Donde existan tuberías,<br>Hidrogística entrega soluciones.</h2>
+      <p class="section-sub">Nuestra tecnología se adapta a cualquier tipo de infraestructura hídrica, desde redes urbanas hasta instalaciones industriales.</p>
+    </div>
+    <div class="cases-grid">
+      <div class="case-card fade-up">
+        <div class="case-icon">🏙️</div>
+        <h3>Redes de Agua Potable Urbanas</h3>
+        <p>Rehabilitación de redes de distribución en zonas de alta densidad sin afectar el suministro ni el tráfico.</p>
+        <span class="case-tag">Curapipe · Impreg GL16</span>
+      </div>
+      <div class="case-card fade-up">
+        <div class="case-icon">🌊</div>
+        <h3>Colectores de Alcantarillado</h3>
+        <p>Renovación estructural de colectores deteriorados con mangas UV de alta resistencia química y mecánica.</p>
+        <span class="case-tag">Impreg GL16 · ASOE</span>
+      </div>
+      <div class="case-card fade-up">
+        <div class="case-icon">🏭</div>
+        <h3>Infraestructura Industrial</h3>
+        <p>Rehabilitación de tuberías de proceso en plantas industriales, minería y energía sin detener la producción.</p>
+        <span class="case-tag">ASOE · Impreg GL16</span>
+      </div>
+      <div class="case-card fade-up">
+        <div class="case-icon">🏢</div>
+        <h3>Edificios y Redes Domiciliarias</h3>
+        <p>Renovación de redes internas en condominios, hospitales, malls y universidades sin romper muros ni pisos.</p>
+        <span class="case-tag">Nuflow · Curapipe</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
-
-        // Calculator functionality
-        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const meters = parseInt(document.getElementById('meters').value);
-            const technology = document.getElementById('technology').value;
-            const environment = document.getElementById('environment').value;
-            const diameter = document.getElementById('diameter').value;
-
-            // Base calculation factors
-            let baseTimeTraditional = 0; // days per 100m
-            let baseCostPerMeter = 0; // USD
-            let co2Factor = 0; // kg per meter
-
-            // Technology-specific factors
-            const techFactors = {
-                curapipe: { time: 14, costPerM: 350, co2: 8 },
-                impreg: { time: 16, costPerM: 380, co2: 9 },
-                asoe: { time: 12, costPerM: 420, co2: 7 },
-                nuflow: { time: 10, costPerM: 300, co2: 6 }
-            };
-
-            // Environment multipliers
-            const envMultipliers = {
-                urban: 1.5,
-                industrial: 1.3,
-                building: 1.2,
-                residential: 1.0
-            };
-
-            // Diameter multipliers
-            const diameterMultipliers = {
-                small: 0.8,
-                medium: 1.0,
-                large: 1.3
-            };
-
-            const tech = techFactors[technology];
-            const envMult = envMultipliers[environment];
-            const diamMult = diameterMultipliers[diameter];
-
-            // Calculate time saved (traditional vs trenchless)
-            const traditionalDays = (meters / 100) * tech.time * envMult;
-            const trenchlessDays = (meters / 100) * 2; // 2 days per 100m average
-            const timeSaved = Math.round(traditionalDays - trenchlessDays);
-
-            // Calculate cost savings (30-60% savings)
-            const traditionalCost = meters * tech.costPerM * envMult * diamMult;
-            const trenchlessCost = traditionalCost * 0.5; // 50% average savings
-            const costSaving = Math.round(traditionalCost - trenchlessCost);
-
-            // Calculate CO2 reduction
-            const traditionalCO2 = meters * tech.co2 * envMult;
-            const trenchlessCO2 = traditionalCO2 * 0.3; // 70% reduction
-            const co2Saved = Math.round(traditionalCO2 - trenchlessCO2);
-
-            // Display results
-            document.getElementById('timeSaved').textContent = timeSaved;
-            document.getElementById('costSaving').textContent = '$' + costSaving.toLocaleString('es-CL');
-            document.getElementById('co2Reduction').textContent = co2Saved.toLocaleString('es-CL');
-            document.getElementById('disruption').textContent = '85%';
-
-            // Show results
-            document.getElementById('resultsContainer').style.display = 'block';
-            document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        });
-
-        // Smooth scrolling for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+<!-- IMPACTO URBANO -->
+<section class="urban-section" id="urbano">
+  <div class="section-inner">
+    <div class="urban-grid">
+      <div class="fade-up">
+        <span class="section-tag">Beneficios para la Ciudad</span>
+        <h2 class="section-title">La ciudad no se detiene<br>con Hidrogística.</h2>
+        <p class="section-sub">Cada proyecto sin zanja es una decisión que beneficia a toda la comunidad, no solo a la red.</p>
+      </div>
+      <div class="urban-items fade-up">
+        <div class="urban-item">
+          <div class="urban-dot">🚗</div>
+          <div>
+            <h4>Menos congestión vehicular</h4>
+            <p>Sin cierres de calles ni desvíos de tránsito. La ciudad fluye con normalidad durante toda la obra.</p>
+          </div>
+        </div>
+        <div class=
