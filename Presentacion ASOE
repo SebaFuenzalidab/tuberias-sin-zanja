@@ -1,4 +1,3 @@
-# Crear presentación HTML interactiva de alto impacto para ENAP-ASOE
 html_content = """<!DOCTYPE html>
 <html lang="es">
 <head>
